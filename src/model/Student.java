@@ -6,7 +6,7 @@ public class Student {
 
 	private String studentName;
 	private String studentPassword;
-	private int numberOfSongsPlayedToday;
+	private int numberOfSongsSelectedToday;
 	private int secondsRemaining;
 	private LocalDate date;
 	
@@ -14,10 +14,34 @@ public class Student {
 		this.studentName = name;
 		this.studentPassword = password;
 		this.secondsRemaining = 90000;
-		this.numberOfSongsPlayedToday = 0;
+		this.numberOfSongsSelectedToday = 0;
+		this.date = LocalDate.now();
 	}
 	
+	public boolean canSelectSong() {
+		resetSongsSelected();
+		if(getNumberOfSongsSelectedToday() == 3) {
+			return false;
+		}
+		return true;
+	}
 	
+	public void resetSongsSelected() {
+		if(!date.equals(LocalDate.now())) {
+			this.numberOfSongsSelectedToday = 0;
+			this.date = LocalDate.now();
+		}
+	}
+	
+	public void songSelect(Song song) {
+		this.numberOfSongsSelectedToday++;
+		this.secondsRemaining -= song.getSongLength();
+	}
+	
+	//this method sets the date. used strictly for JUnit testing
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
 
 	public String getStudentName() {
 		return studentName;
@@ -27,13 +51,11 @@ public class Student {
 		return studentPassword;
 	}
 
-	public int getNumberOfSongsPlayedToday() {
-		return numberOfSongsPlayedToday;
+	public int getNumberOfSongsSelectedToday() {
+		return numberOfSongsSelectedToday;
 	}
 
 	public int getSecondsRemaining() {
 		return secondsRemaining;
 	}
-	
-	
 }
