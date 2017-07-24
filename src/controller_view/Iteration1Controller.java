@@ -38,6 +38,7 @@ public class Iteration1Controller extends Application {
 	Button login;
 	Button logout;
 	Label instruct;
+	Student currentUser;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -49,7 +50,7 @@ public class Iteration1Controller extends Application {
 		/* Initializing all Variables */
 		jukeBox = new JukeBox();
 		loggedIn = false;
-//		users = jukeBox.getUsers();
+		users = jukeBox.getUsers();
 //		songList = jukeBox.getSongList();
 //		songQueue = jukeBox.getSongQueue();
 
@@ -122,12 +123,14 @@ public class Iteration1Controller extends Application {
 	 ********************************************************/
 	//Login functionality
 	public void logIn() {
-		String name = accountName.getText();
-		String pass = password.getText();
+		String name = textAccountName.getText();
+		String pass = textPassword.getText();
 		if (jukeBox.authenticateUser(name, pass)) {
 			instruct.setText("Successful Login!");
 			instruct.setTextFill(Color.GREEN);
 			loggedIn = true;
+			currentUser = users.get(jukeBox.locateUser(name));
+			System.out.println(currentUser.getStudentName());
 		}
 		else {
 			instruct.setText("Invalid, Try Again!");
@@ -141,6 +144,7 @@ public class Iteration1Controller extends Application {
 		textPassword.setText("");
 		instruct.setText("Login first");
 		instruct.setTextFill(Color.GREEN);
+		currentUser = null;
 		/*String name = accountName.getText();
 		String pass = password.getText();
 		if (jukeBox.authenticateUser(name, pass) == true) {
