@@ -31,13 +31,11 @@ public class Song {
 	
 	//this method plays the mp3. returns true if the song can be played.
 	//returns false if the song cannot be played
-	public boolean play() {
+	public void play() {
 		//this.resetDate();
-		if(this.canBePlayed()) {
+		
 			this.timesPlayedToday++;
-			return true;
-		}
-		return false;
+			
 	}
 	
 	//checks to see if the saved date is the current date, if not
@@ -72,5 +70,4 @@ public class Song {
 	public String getFileName() {
 		return fileName;
 	}
-	
 }

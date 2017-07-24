@@ -48,7 +48,6 @@ public class ModelTests {
 		song.play();
 		assertTrue(song.canBePlayed());
 		song.play();
-		assertFalse(song.play());
 		assertFalse(song.canBePlayed());
 		assertEquals(3, song.getTimesPlayedToday());			
 	}
@@ -110,21 +109,4 @@ public class ModelTests {
 		assertEquals(0, studentCheck.getNumberOfSongsSelectedToday());
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 }

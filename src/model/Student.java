@@ -32,7 +32,7 @@ public class Student {
 			this.date = LocalDate.now();
 		}
 	}
-	
+
 	public void songSelect(Song song) {
 		this.numberOfSongsSelectedToday++;
 		this.secondsRemaining -= song.getSongLength();

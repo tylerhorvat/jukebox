@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Queue;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -21,7 +23,7 @@ import model.JukeBox;
 import model.Song;
 import model.Student;
 
-public class Iteration1Controller extends Application {
+public class Iteration1Controller extends Application{
 	
 	/* GLOBALS for JukeBox */
 	
@@ -52,8 +54,8 @@ public class Iteration1Controller extends Application {
 		jukeBox = new JukeBox();
 		loggedIn = false;
 		users = jukeBox.getUsers();
-//		songList = jukeBox.getSongList();
-//		songQueue = jukeBox.getSongQueue();
+		songList = jukeBox.getSongList();
+		songQueue = jukeBox.getSongQueue();
 
 		BorderPane all = new BorderPane();
 
@@ -108,29 +110,31 @@ public class Iteration1Controller extends Application {
 		// button functionality
 		login.setOnAction(e -> logIn());
 		logout.setOnAction(e -> logOut());
-		song1.setOnAction(e -> playSong1());
-		song2.setOnAction(e -> playSong2());
+		song1.setOnAction(new ButtonListener());
+		song2.setOnAction(new ButtonListener());
 
 		// Don't forget to show the running application:
 		primaryStage.show();
 	}
-	
+
 	/********************************************************
 	 *                   FOR REFERENCE
-	 * 	User: chris - Pass:  1
-	 *  User: devon - Pass: 22
-	 *  User: river - Pass: 333
-	 *  User: ryan - Pass: 4444
+	 * 	User: Chris - Pass:  1
+	 *  User: Devon - Pass: 22
+	 *  User: River - Pass: 333
+	 *  User: Ryan - Pass: 4444
 	 ********************************************************/
+	
 	//Login functionality
 	public void logIn() {
 		String name = textAccountName.getText();
 		String pass = textPassword.getText();
 		if (jukeBox.authenticateUser(name, pass)) {
 			instruct.setText("Successful Login!");
-			instruct.setTextFill(Color.GREEN);
+			//instruct.setTextFill(Color.GREEN);
 			loggedIn = true;
 			currentUser = users.get(jukeBox.locateUser(name));
+			instruct.setText(currentUser.getNumberOfSongsSelectedToday() + " selected, " + timeConversion(currentUser.getSecondsRemaining()));
 		}
 		else {
 			instruct.setText("Invalid, Try Again!");
@@ -144,59 +148,146 @@ public class Iteration1Controller extends Application {
 		textAccountName.setText("");
 		textPassword.setText("");
 		instruct.setText("Login first");
-		instruct.setTextFill(Color.GREEN);
+		instruct.setTextFill(Color.BLACK);
 		currentUser = null;		
 	}
 	
-	public void playSong1() {
-		if (loggedIn == false) {
-			Stage window = new Stage();
-			window.setTitle("Message");
-			window.setMinWidth(250);
-			window.setMinHeight(150);
-			window.initModality(Modality.APPLICATION_MODAL);
+	private class ButtonListener implements EventHandler<ActionEvent> {
+
+		@Override
+		public void handle(ActionEvent arg0) {
+			if (loggedIn == false) {
+				Stage window = new Stage();
+				window.setTitle("Message");
+				window.setMinWidth(250);
+				window.setMinHeight(150);
+				window.initModality(Modality.APPLICATION_MODAL);
+				
+				Label label = new Label();
+				label.setText("User must login to play a song.");
+				Button closeButton = new Button("Okay, got it!");
+				closeButton.setOnAction(e -> window.close());
+				
+				VBox layout = new VBox(10);
+				layout.getChildren().addAll(label, closeButton);
+				layout.setAlignment(Pos.CENTER);
+				
+				Scene scene = new Scene(layout);
+				window.setScene(scene);
+				window.showAndWait();
+			}
+			else {
+				if(currentUser.canSelectSong()) {
+					Button buttonClicked = (Button) arg0.getSource();
+					if(buttonClicked == song1) {
+						Song song = songList.get(0);
+						if(song.canBePlayed()) {
+							song.play();
+							currentUser.songSelect(song);
+							jukeBox.addSongToQueue(currentUser, song);
+							if(!jukeBox.isPlaying()) {
+								try {
+									jukeBox.playSongQueue();
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+							instruct.setText(currentUser.getNumberOfSongsSelectedToday() + " selected, " + timeConversion(currentUser.getSecondsRemaining()));
+							System.out.println(songQueue.toString());
+						}
+						else {
+							songPlayError(song);
+						}
+					}
+					else if(buttonClicked == song2) {
+						Song song = songList.get(3);
+						if(song.canBePlayed()) {
+							song.play();
+							currentUser.songSelect(song);
+							jukeBox.addSongToQueue(currentUser, song);
+							if(!jukeBox.isPlaying()) {
+								try {
+									jukeBox.playSongQueue();
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+							instruct.setText(currentUser.getNumberOfSongsSelectedToday() + " selected, " + timeConversion(currentUser.getSecondsRemaining()));
+							System.out.println(songQueue.toString());
+						}
+						else {
+							songPlayError(song);
+						}
+					}
+				}
+				else {
+					userSongError();
+				}
+				
+			}
 			
-			Label label = new Label();
-			label.setText("User must login to play a song.");
-			Button closeButton = new Button("Okay, got it!");
-			closeButton.setOnAction(e -> window.close());
-			
-			VBox layout = new VBox(10);
-			layout.getChildren().addAll(label, closeButton);
-			layout.setAlignment(Pos.CENTER);
-			
-			Scene scene = new Scene(layout);
-			window.setScene(scene);
-			window.showAndWait();
 		}
-		else {
-			
-		}
+		
 	}
 	
-	public void playSong2() {
-		if (loggedIn == false) {
-			Stage window = new Stage();
-			window.setTitle("Message");
-			window.setMinWidth(250);
-			window.setMinHeight(150);
-			window.initModality(Modality.APPLICATION_MODAL);
-			
-			Label label = new Label();
-			label.setText("User must login to play a song.");
-			Button closeButton = new Button("Okay, got it!");
-			closeButton.setOnAction(e -> window.close());
-			
-			VBox layout = new VBox(10);
-			layout.getChildren().addAll(label, closeButton);
-			layout.setAlignment(Pos.CENTER);
-			
-			Scene scene = new Scene(layout);
-			window.setScene(scene);
-			window.showAndWait();
-		}
-		else {
-			
-		}
+	private void songPlayError(Song song) {
+		Stage window = new Stage();
+		window.setTitle("Message");
+		window.setMinWidth(250);
+		window.setMinHeight(150);
+		window.initModality(Modality.APPLICATION_MODAL);
+		
+		Label label = new Label();
+		label.setText(song.getSongName() + " max plays reached");
+		Button closeButton = new Button("OK");
+		closeButton.setOnAction(e -> window.close());
+		
+		VBox layout = new VBox(10);
+		layout.getChildren().addAll(label, closeButton);
+		layout.setAlignment(Pos.CENTER);
+		
+		Scene scene = new Scene(layout);
+		window.setScene(scene);
+		window.showAndWait();
 	}
+	
+	private void userSongError() {
+		Stage window = new Stage();
+		window.setTitle("Message");
+		window.setMinWidth(250);
+		window.setMinHeight(150);
+		window.initModality(Modality.APPLICATION_MODAL);
+		
+		Label label = new Label();
+		label.setText(currentUser.getStudentName() + " has reached the limit");
+		Button closeButton = new Button("OK");
+		closeButton.setOnAction(e -> window.close());
+		
+		VBox layout = new VBox(10);
+		layout.getChildren().addAll(label, closeButton);
+		layout.setAlignment(Pos.CENTER);
+		
+		Scene scene = new Scene(layout);
+		window.setScene(scene);
+		window.showAndWait();
+	}
+	
+	private String timeConversion(int totalSeconds) {
+
+	    final int MINUTES_IN_AN_HOUR = 60;
+	    final int SECONDS_IN_A_MINUTE = 60;
+
+	    int seconds = totalSeconds % SECONDS_IN_A_MINUTE;
+	    int totalMinutes = totalSeconds / SECONDS_IN_A_MINUTE;
+	    int minutes = totalMinutes % MINUTES_IN_AN_HOUR;
+	    int hours = totalMinutes / MINUTES_IN_AN_HOUR;
+	    
+	    String timeString = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+
+	    return timeString;
+	}
+
+	
 }

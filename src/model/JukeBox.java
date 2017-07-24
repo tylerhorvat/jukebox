@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class JukeBox {
+public class JukeBox extends Thread{
 
 	Queue<Song> songQueue;
 	ArrayList<Song> songList; 
 	ArrayList<Student> users;
+	boolean isPlaying;
 	
 	public JukeBox() {
 		songQueue = new LinkedList<>();
@@ -16,8 +17,9 @@ public class JukeBox {
 		users = new ArrayList<>();
 		addStudents();
 		addSongs();
+		isPlaying = false;
 	}
-	
+
 	//locates the user based on user name
 	//returns the index of that user
 	//if the user does not exist, returns -1
@@ -49,23 +51,26 @@ public class JukeBox {
 	//checks to see if a song can be selected for the day.
 	//if so adds to queue and returns true
 	//if not, does not add to queue and returns false
-	public boolean addSongToQueue(Song song) {
-		if(song.canBePlayed()) {
-			songQueue.add(song);
-			return true;
-		}
-		return false;
+	public void addSongToQueue(Student user, Song song) {
+			songQueue.add(song);		
 	}
 	
 	//plays all songs that are in the songQueue
-	public void playSongQueue() {
+	public void playSongQueue() throws InterruptedException {
 		while(!songQueue.isEmpty()) {
+			isPlaying = true;
 			Song song = songQueue.peek();
 			song.play();
 			songQueue.remove();
+			//Thread.sleep(6000);
 		}
+		isPlaying = false;
 	}
 	
+	public boolean isPlaying() {
+		return isPlaying;
+	}
+
 	public Queue<Song> getSongQueue() {
 		return songQueue;
 	}
