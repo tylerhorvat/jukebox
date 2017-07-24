@@ -29,8 +29,15 @@ public class Iteration1Controller extends Application {
 	ArrayList<Student> users;
 	ArrayList<Song> songList;
 	Queue<Song> songQueue;
-	
-	
+	Button song1;
+	Button song2;
+	Label accountName;
+	Label password;
+	TextField textAccountName;
+	TextField textPassword;
+	Button login;
+	Button logout;
+	Label instruct;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -50,27 +57,27 @@ public class Iteration1Controller extends Application {
 
 		// set up song select buttons
 		GridPane songSelect = new GridPane();
-		Button song1 = new Button("Select song 1");
-		Button song2 = new Button("Select song 2");
+		song1 = new Button("Select song 1");
+		song2 = new Button("Select song 2");
 		songSelect.add(song1, 0, 0);
 		songSelect.add(song2, 1, 0);
 		songSelect.setHgap(10);
 		songSelect.setAlignment(Pos.CENTER);
 
 		// set up login area
-		Label accountName = new Label("Account Name");
-		Label password = new Label("         Password");
-		TextField textAccountName = new TextField();
-		TextField textPassword = new TextField();
+		accountName = new Label("Account Name");
+		password = new Label("         Password");
+		textAccountName = new TextField();
+		textPassword = new TextField();
 
 		textAccountName.setMaxWidth(150);
 		textPassword.setMaxWidth(150);
 		textAccountName.setMaxHeight(10);
 		textPassword.setMaxHeight(10);
 
-		Button login = new Button("Login");
-		Button logout = new Button("Log out");
-		Label instruct = new Label("Login first");
+		login = new Button("Login");
+		logout = new Button("Log out");
+		instruct = new Label("Login first");
 
 		// add all login elements to grid
 		GridPane userInput = new GridPane();
@@ -97,8 +104,8 @@ public class Iteration1Controller extends Application {
 		primaryStage.setScene(scene);
 		
 		// button functionality
-		login.setOnAction(e -> logIn(textAccountName, textPassword, instruct));
-		logout.setOnAction(e -> logOut(textAccountName, textPassword, instruct));
+		login.setOnAction(e -> logIn());
+		logout.setOnAction(e -> logOut());
 		song1.setOnAction(e -> playSong1());
 		song2.setOnAction(e -> playSong2());
 
@@ -114,10 +121,10 @@ public class Iteration1Controller extends Application {
 	 *  User: ryan - Pass: 4444
 	 ********************************************************/
 	//Login functionality
-	public void logIn(TextField accountName, TextField password, Label instruct) {
+	public void logIn() {
 		String name = accountName.getText();
 		String pass = password.getText();
-		if (jukeBox.authenticateUser(name, pass) == true) {
+		if (jukeBox.authenticateUser(name, pass)) {
 			instruct.setText("Successful Login!");
 			instruct.setTextFill(Color.GREEN);
 			loggedIn = true;
@@ -128,8 +135,13 @@ public class Iteration1Controller extends Application {
 		}		
 	}
 	//Logout functionality
-	public void logOut(TextField accountName, TextField password, Label instruct) {
-		String name = accountName.getText();
+	public void logOut() {
+		loggedIn = false;
+		textAccountName.setText("");
+		textPassword.setText("");
+		instruct.setText("Login first");
+		instruct.setTextFill(Color.GREEN);
+		/*String name = accountName.getText();
 		String pass = password.getText();
 		if (jukeBox.authenticateUser(name, pass) == true) {
 			instruct.setText("Successful Login!");
@@ -139,7 +151,8 @@ public class Iteration1Controller extends Application {
 		else {
 			instruct.setText("Invalid, Try Again!");
 			instruct.setTextFill(Color.RED);
-		}		
+		}*/
+		
 	}
 	
 	public void playSong1() {

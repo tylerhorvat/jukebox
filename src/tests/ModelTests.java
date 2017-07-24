@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 import org.junit.Test;
 
+import model.JukeBox;
 import model.Song;
 
 public class ModelTests {
@@ -33,6 +34,16 @@ public class ModelTests {
 		assertFalse(song.canBePlayed());
 		song.setDate(LocalDate.now().minusDays(1));
 		assertTrue(song.canBePlayed());
+	}
+	
+	@Test
+	public void authenticateUserTest() {
+		JukeBox jukebox = new JukeBox();
+		assertTrue(jukebox.authenticateUser("Chris", "1"));
+		assertTrue(jukebox.authenticateUser("Devon", "22"));
+		assertTrue(jukebox.authenticateUser("River", "333"));
+		assertTrue(jukebox.authenticateUser("Ryan", "4444"));
+		assertFalse(jukebox.authenticateUser("chris", "1"));
 	}
 
 }
