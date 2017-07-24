@@ -1,10 +1,15 @@
 package model;
 
+import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class JukeBox extends Thread{
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
+public class JukeBox {
 
 	Queue<Song> songQueue;
 	ArrayList<Song> songList; 
@@ -48,23 +53,36 @@ public class JukeBox extends Thread{
 		return false;
 	}
 	
+	public void playQueue() {
+		while(!songQueue.isEmpty()) {
+			isPlaying = true;
+			Song song = songQueue.remove();
+			File file = new File(song.getSongFile());
+		    URI uri = file.toURI();
+		    System.out.println(uri);
+		    Media media = new Media(uri.toString());
+		    MediaPlayer mediaPlayer = new MediaPlayer(media);
+		    //mediaPlayer.setAutoPlay(true);
+		    mediaPlayer.play();
+		    
+		    
+		    //mediaPlayer.set;
+		    mediaPlayer.setOnEndOfMedia(new EndOfSongHandler());
+			/*try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}*/
+		}
+		isPlaying = false;
+	}
+	
 	//checks to see if a song can be selected for the day.
 	//if so adds to queue and returns true
 	//if not, does not add to queue and returns false
 	public void addSongToQueue(Student user, Song song) {
 			songQueue.add(song);		
-	}
-	
-	//plays all songs that are in the songQueue
-	public void playSongQueue() throws InterruptedException {
-		while(!songQueue.isEmpty()) {
-			isPlaying = true;
-			Song song = songQueue.peek();
-			song.play();
-			songQueue.remove();
-			//Thread.sleep(6000);
-		}
-		isPlaying = false;
 	}
 	
 	public boolean isPlaying() {
@@ -116,4 +134,45 @@ public class JukeBox extends Thread{
 	Song swingCheese = new Song("Swing Cheese", 15, "FreePlay Music", "SwingCheese.mp3");
 	Song theCurtainRises = new Song("The Curtain Rises", 28, "Kevin MacLeod", "TheCurtainRises.mp3");
 	Song untameableFire = new Song("Untameable Fire", 282, "Pierre Langer", "UntameableFire.mp3");
+
+//	@Override
+//	public void run() {
+		// TODO Auto-generated method stub
+//		while(!songQueue.isEmpty()) {
+//			isPlaying = true;
+//			Song song = songQueue.remove();
+//			File file = new File(song.getSongFile());
+//		    URI uri = file.toURI();
+//		    System.out.println(uri);
+//		    Media media = new Media(uri.toString());
+//		    MediaPlayer mediaPlayer = new MediaPlayer(media);
+//		    mediaPlayer.setAutoPlay(true);
+//		    mediaPlayer.play();
+		    
+		    //mediaPlayer.set;
+		    //mediaPlayer.setOnEndOfMedia(new EndOfSongHandler());
+			/*try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}*/
+//		}
+//		isPlaying = false;
+//	}
+	
+	private class EndOfSongHandler implements Runnable{
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}
 }

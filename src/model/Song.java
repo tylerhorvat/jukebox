@@ -10,6 +10,7 @@ public class Song {
 	private String fileName;
 	private int timesPlayedToday;
 	private LocalDate date;
+	private String songFile;
 	
 
 	public Song(String songName, int songLength, String songArtist, String fileName) {
@@ -19,8 +20,13 @@ public class Song {
 		this.fileName = fileName;
 		this.timesPlayedToday = 0;
 		this.date = LocalDate.now();
+		songFile = "songfiles/" + fileName;
 	}
 	
+	public String getSongFile() {
+		return songFile;
+	}
+
 	public boolean canBePlayed() {
 		this.resetTimesPlayed();
 		if(getTimesPlayedToday() == 3)

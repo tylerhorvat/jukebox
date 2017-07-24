@@ -127,19 +127,26 @@ public class Iteration1Controller extends Application{
 	
 	//Login functionality
 	public void logIn() {
-		String name = textAccountName.getText();
-		String pass = textPassword.getText();
-		if (jukeBox.authenticateUser(name, pass)) {
-			instruct.setText("Successful Login!");
-			//instruct.setTextFill(Color.GREEN);
-			loggedIn = true;
-			currentUser = users.get(jukeBox.locateUser(name));
-			instruct.setText(currentUser.getNumberOfSongsSelectedToday() + " selected, " + timeConversion(currentUser.getSecondsRemaining()));
+		if(currentUser != null) {
+			instruct.setText(currentUser.getStudentName() + " must log out first");
+			instruct.setTextFill(Color.RED);
 		}
 		else {
-			instruct.setText("Invalid, Try Again!");
-			instruct.setTextFill(Color.RED);
-		}		
+			String name = textAccountName.getText();
+			String pass = textPassword.getText();
+			if (jukeBox.authenticateUser(name, pass)) {
+				instruct.setText("Successful Login!");
+				loggedIn = true;
+				currentUser = users.get(jukeBox.locateUser(name));
+				textAccountName.setText("");
+				textPassword.setText("");
+				instruct.setText(currentUser.getNumberOfSongsSelectedToday() + " selected, " + timeConversion(currentUser.getSecondsRemaining()));
+			}
+			else {
+				instruct.setText("Invalid, Try Again!");
+				instruct.setTextFill(Color.RED);
+			}
+		}
 	}
 	
 	//Logout functionality
@@ -186,15 +193,12 @@ public class Iteration1Controller extends Application{
 							currentUser.songSelect(song);
 							jukeBox.addSongToQueue(currentUser, song);
 							if(!jukeBox.isPlaying()) {
-								try {
-									jukeBox.playSongQueue();
-								} catch (InterruptedException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
+								jukeBox.playQueue();
+								/*Thread thread = new Thread(jukeBox);
+								thread.start();*/
 							}
 							instruct.setText(currentUser.getNumberOfSongsSelectedToday() + " selected, " + timeConversion(currentUser.getSecondsRemaining()));
-							System.out.println(songQueue.toString());
+							//System.out.println(songQueue.toString());
 						}
 						else {
 							songPlayError(song);
@@ -207,15 +211,12 @@ public class Iteration1Controller extends Application{
 							currentUser.songSelect(song);
 							jukeBox.addSongToQueue(currentUser, song);
 							if(!jukeBox.isPlaying()) {
-								try {
-									jukeBox.playSongQueue();
-								} catch (InterruptedException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
+								jukeBox.playQueue();
+								/*Thread thread = new Thread(jukeBox);
+								thread.start();*/
 							}
 							instruct.setText(currentUser.getNumberOfSongsSelectedToday() + " selected, " + timeConversion(currentUser.getSecondsRemaining()));
-							System.out.println(songQueue.toString());
+							//System.out.println(songQueue.toString());
 						}
 						else {
 							songPlayError(song);
