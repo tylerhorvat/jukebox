@@ -193,9 +193,9 @@ public class Iteration1Controller extends Application{
 							currentUser.songSelect(song);
 							jukeBox.addSongToQueue(currentUser, song);
 							if(!jukeBox.isPlaying()) {
-								jukeBox.playQueue();
-								/*Thread thread = new Thread(jukeBox);
-								thread.start();*/
+								//jukeBox.playQueue();
+								Thread thread = new Thread(jukeBox);
+								thread.start();
 							}
 							instruct.setText(currentUser.getNumberOfSongsSelectedToday() + " selected, " + timeConversion(currentUser.getSecondsRemaining()));
 							//System.out.println(songQueue.toString());
@@ -211,9 +211,9 @@ public class Iteration1Controller extends Application{
 							currentUser.songSelect(song);
 							jukeBox.addSongToQueue(currentUser, song);
 							if(!jukeBox.isPlaying()) {
-								jukeBox.playQueue();
-								/*Thread thread = new Thread(jukeBox);
-								thread.start();*/
+								//jukeBox.playQueue();
+								Thread thread = new Thread(jukeBox);
+								thread.start();
 							}
 							instruct.setText(currentUser.getNumberOfSongsSelectedToday() + " selected, " + timeConversion(currentUser.getSecondsRemaining()));
 							//System.out.println(songQueue.toString());

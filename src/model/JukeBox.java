@@ -9,7 +9,7 @@ import java.util.Queue;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-public class JukeBox {
+public class JukeBox implements Runnable{
 
 	Queue<Song> songQueue;
 	ArrayList<Song> songList; 
@@ -53,7 +53,7 @@ public class JukeBox {
 		return false;
 	}
 	
-	public void playQueue() {
+	/*public void playQueue() {
 		while(!songQueue.isEmpty()) {
 			isPlaying = true;
 			Song song = songQueue.remove();
@@ -74,9 +74,9 @@ public class JukeBox {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}*/
-		}
-		isPlaying = false;
-	}
+		//}
+		//isPlaying = false;
+	//}
 	
 	//checks to see if a song can be selected for the day.
 	//if so adds to queue and returns true
@@ -135,33 +135,33 @@ public class JukeBox {
 	Song theCurtainRises = new Song("The Curtain Rises", 28, "Kevin MacLeod", "TheCurtainRises.mp3");
 	Song untameableFire = new Song("Untameable Fire", 282, "Pierre Langer", "UntameableFire.mp3");
 
-//	@Override
-//	public void run() {
+	@Override
+	public void run() {
 		// TODO Auto-generated method stub
-//		while(!songQueue.isEmpty()) {
-//			isPlaying = true;
-//			Song song = songQueue.remove();
-//			File file = new File(song.getSongFile());
-//		    URI uri = file.toURI();
-//		    System.out.println(uri);
-//		    Media media = new Media(uri.toString());
-//		    MediaPlayer mediaPlayer = new MediaPlayer(media);
-//		    mediaPlayer.setAutoPlay(true);
-//		    mediaPlayer.play();
+		while(!songQueue.isEmpty()) {
+			isPlaying = true;
+			Song song = songQueue.remove();
+			File file = new File(song.getSongFile());
+		    URI uri = file.toURI();
+		    System.out.println(uri);
+		    Media media = new Media(uri.toString());
+		    MediaPlayer mediaPlayer = new MediaPlayer(media);
+		    mediaPlayer.setAutoPlay(true);
+		    mediaPlayer.play();
 		    
 		    //mediaPlayer.set;
 		    //mediaPlayer.setOnEndOfMedia(new EndOfSongHandler());
-			/*try {
-				Thread.sleep(2000);
+			try {
+				Thread.sleep((song.getSongLength()) *1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}*/
-//		}
-//		isPlaying = false;
-//	}
+			}
+		}
+		isPlaying = false;
+	}
 	
-	private class EndOfSongHandler implements Runnable{
+	/*private class EndOfSongHandler implements Runnable{
 
 		@Override
 		public void run() {
@@ -174,5 +174,5 @@ public class JukeBox {
 			}
 		}
 		
-	}
+	}*/
 }
