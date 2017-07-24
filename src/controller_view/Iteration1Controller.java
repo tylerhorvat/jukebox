@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -34,7 +35,7 @@ public class Iteration1Controller extends Application {
 	Label accountName;
 	Label password;
 	TextField textAccountName;
-	TextField textPassword;
+	PasswordField textPassword;
 	Button login;
 	Button logout;
 	Label instruct;
@@ -69,7 +70,7 @@ public class Iteration1Controller extends Application {
 		accountName = new Label("Account Name");
 		password = new Label("         Password");
 		textAccountName = new TextField();
-		textPassword = new TextField();
+		textPassword = new PasswordField();
 
 		textAccountName.setMaxWidth(150);
 		textPassword.setMaxWidth(150);
@@ -130,13 +131,13 @@ public class Iteration1Controller extends Application {
 			instruct.setTextFill(Color.GREEN);
 			loggedIn = true;
 			currentUser = users.get(jukeBox.locateUser(name));
-			System.out.println(currentUser.getStudentName());
 		}
 		else {
 			instruct.setText("Invalid, Try Again!");
 			instruct.setTextFill(Color.RED);
 		}		
 	}
+	
 	//Logout functionality
 	public void logOut() {
 		loggedIn = false;
@@ -144,19 +145,7 @@ public class Iteration1Controller extends Application {
 		textPassword.setText("");
 		instruct.setText("Login first");
 		instruct.setTextFill(Color.GREEN);
-		currentUser = null;
-		/*String name = accountName.getText();
-		String pass = password.getText();
-		if (jukeBox.authenticateUser(name, pass) == true) {
-			instruct.setText("Successful Login!");
-			instruct.setTextFill(Color.GREEN);
-			loggedIn = true;
-		}
-		else {
-			instruct.setText("Invalid, Try Again!");
-			instruct.setTextFill(Color.RED);
-		}*/
-		
+		currentUser = null;		
 	}
 	
 	public void playSong1() {
@@ -180,6 +169,9 @@ public class Iteration1Controller extends Application {
 			window.setScene(scene);
 			window.showAndWait();
 		}
+		else {
+			
+		}
 	}
 	
 	public void playSong2() {
@@ -202,6 +194,9 @@ public class Iteration1Controller extends Application {
 			Scene scene = new Scene(layout);
 			window.setScene(scene);
 			window.showAndWait();
+		}
+		else {
+			
 		}
 	}
 }
