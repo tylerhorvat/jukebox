@@ -32,7 +32,7 @@ public class JukeBox implements Runnable {
 	
 	/********************************************************
 	 * JukeBox()
-	 * JUKEBOX CONSTUCTOR
+	 * JUKEBOX CONSTRUCTOR
 	 ********************************************************/
 	public JukeBox() {
 		songQueue = new LinkedList<>();
@@ -80,9 +80,7 @@ public class JukeBox implements Runnable {
 	
 	/********************************************************
 	 * void addSongToQueue(Song song)
-	 * checks to see if a song can be selected for the day.
-	 * if so adds to queue and returns true
-	 * if not, does not add to queue and returns false
+	 * adds song to queue
 	 ********************************************************/
 	public void addSongToQueue(Song song) {
 			songQueue.add(song);		

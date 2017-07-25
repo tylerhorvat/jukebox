@@ -24,10 +24,10 @@ public class Student {
 	private int numberOfSongsSelectedToday;
 	private int secondsRemaining;
 	private LocalDate date;
-	
+		
 	/********************************************************
 	 * public boolean Student(String name, String password)
-	 * Studen constructor
+	 * Student constructor
 	 ********************************************************/
 	public Student(String name, String password) {
 		this.studentName = name;
@@ -53,7 +53,7 @@ public class Student {
 	/********************************************************
 	 * public void resetSongsSelected() 
 	 * This method determines if the saved date is the current
-	 * date. if it is not, resets, the number of songs selected
+	 * date. if it is not, resets the number of songs selected
 	 * to zero.
 	 ********************************************************/
 	public void resetSongsSelected() {

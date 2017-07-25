@@ -28,7 +28,7 @@ public class Song {
 	
 	/********************************************************
 	 * Song(String songName, int songLength, String songArtist, String fileName)
-	 * SONG CONSTUCTOR
+	 * SONG CONSTRUCTOR
 	 ********************************************************/
 	public Song(String songName, int songLength, String songArtist, String fileName) {
 		this.songName = songName;
@@ -55,8 +55,8 @@ public class Song {
 	
 	/********************************************************
 	 * public int select()
-	 * this method plays the mp3. returns true if the song can be played.
-	 * returns false if the song cannot be played
+	 * this method plays increments the number of times
+	 * the song has been selected today
 	 ********************************************************/
 	public void select() {		
 			this.timesPlayedToday++;
