@@ -1,3 +1,13 @@
+/*
+ * Class: ModelTests.java
+ * Project: JukeBox
+ * CSC 335 July 25, 2017
+ * Authors: Hayden Monarch
+ * 			Tyler Horvat
+ * 
+ * This class implements JUnit testing to test methods within the model package of JukeBox
+ */
+
 package tests;
 
 import static org.junit.Assert.*;
@@ -40,11 +50,11 @@ public class ModelTests {
 		Song song = new Song("Pokemon Capture", 5, "Pikachu", "Capture.mp3");
 		assertEquals(0, song.getTimesPlayedToday());
 		assertTrue(song.canBePlayed());
-		song.play();
+		song.select();
 		assertTrue(song.canBePlayed());
-		song.play();
+		song.select();
 		assertTrue(song.canBePlayed());
-		song.play();
+		song.select();
 		assertFalse(song.canBePlayed());
 		assertEquals(3, song.getTimesPlayedToday());			
 	}
@@ -52,9 +62,9 @@ public class ModelTests {
 	@Test
 	public void playSongThreeTimesOnDifferentDays() {
 		Song song = new Song("Pokemon Capture", 5, "Pikachu", "Capture.mp3");
-		song.play();
-		song.play();
-		song.play();
+		song.select();
+		song.select();
+		song.select();
 		assertFalse(song.canBePlayed());
 		song.setDate(LocalDate.now().minusDays(1));
 		assertTrue(song.canBePlayed());
@@ -95,7 +105,7 @@ public class ModelTests {
 		assertEquals(5, songCheck.getSongLength());
 		assertEquals("Pikachu", songCheck.getSongArtist());
 		assertEquals("Capture.mp3", songCheck.getFileName());
-		jukebox.addSongToQueue(new Student("Chris", "1"), songCheck);
+		jukebox.addSongToQueue(songCheck);
 		if(!jukebox.isPlaying()) {
 			Thread thread = new Thread(jukebox);
 			thread.start();

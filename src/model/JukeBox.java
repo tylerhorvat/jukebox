@@ -1,3 +1,15 @@
+/*
+ * Class: JukeBox.java
+ * Project: JukeBox
+ * CSC 335 July 25, 2017
+ * Authors: Hayden Monarch
+ * 			Tyler Horvat
+ * 
+ * This class implements the JukeBox.  Adds all users to an array list and all songs to another array list
+ * Has methods to locate a user, authenticate a users credentials (case sensitive), add songs to the 
+ * song queue. Uses a new thread to play all songs in the song queue.
+ */
+
 package model;
 
 import java.io.File;
@@ -10,11 +22,13 @@ import javafx.scene.media.MediaPlayer;
 
 public class JukeBox implements Runnable {
 
+	/*Globals for JukeBox*/
 	Queue<Song> songQueue;
 	ArrayList<Song> songList; 
 	ArrayList<Student> users;
 	boolean isPlaying;
 	
+	//JukeBox constructor
 	public JukeBox() {
 		songQueue = new LinkedList<>();
 		songList = new ArrayList<>();
@@ -55,22 +69,26 @@ public class JukeBox implements Runnable {
 	//checks to see if a song can be selected for the day.
 	//if so adds to queue and returns true
 	//if not, does not add to queue and returns false
-	public void addSongToQueue(Student user, Song song) {
+	public void addSongToQueue(Song song) {
 			songQueue.add(song);		
 	}
 	
+	//returns boolean variable isPlaying
 	public boolean isPlaying() {
 		return isPlaying;
 	}
 
+	//get song queue
 	public Queue<Song> getSongQueue() {
 		return songQueue;
 	}
 
+	//get song list
 	public ArrayList<Song> getSongList() {
 		return songList;
 	}
 
+	//get users list
 	public ArrayList<Student> getUsers() {
 		return users;
 	}
@@ -111,6 +129,7 @@ public class JukeBox implements Runnable {
 
 	@Override
 	public void run() {
+		//plays all songs in queue
 		while(!songQueue.isEmpty()) {
 			isPlaying = true;
 			Song song = songQueue.remove();

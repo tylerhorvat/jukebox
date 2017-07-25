@@ -1,3 +1,15 @@
+/*
+ * Class: Iteration1Controller.java
+ * Project: JukeBox - Iteration 1
+ * CSC 335 July 25, 2017
+ * Authors: Hayden Monarch
+ * 			Tyler Horvat
+ * 
+ * This class implements a GUI for JukeBox. Allows a user to login and log out. During login, the user can select from two different song.
+ * If the user runs out of songs, he will be notified. The user will also be notified if a song can no longer be selected for playback
+ * for the day
+ */
+
 package controller_view;
 
 import java.util.ArrayList;
@@ -7,7 +19,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -39,7 +50,7 @@ public class Iteration1Controller extends Application{
 	PasswordField textPassword;
 	Button login;
 	Button logout;
-	Label instruct;
+	Label status;
 	Student currentUser;
 
 	public static void main(String[] args) {
@@ -80,7 +91,7 @@ public class Iteration1Controller extends Application{
 
 		login = new Button("Login");
 		logout = new Button("Log out");
-		instruct = new Label("Login first");
+		status = new Label("Login first");
 
 		// add all login elements to grid
 		GridPane userInput = new GridPane();
@@ -89,16 +100,11 @@ public class Iteration1Controller extends Application{
 		userInput.add(textAccountName, 1, 0);
 		userInput.add(textPassword, 1, 1);
 		userInput.add(login, 1, 2);
-		userInput.add(instruct, 1, 3);
+		userInput.add(status, 1, 3);
 		userInput.add(logout, 1, 4);
 		userInput.setHgap(10);
 		userInput.setVgap(10);
 		userInput.setAlignment(Pos.CENTER);
-		
-		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-		alert.setTitle("Information Dialog");
-		alert.setTitle("Information Dialog");
-		alert.setHeaderText("Look, an Information Dialog");
 
 		// add everything to borderpane
 		all.setTop(songSelect);
@@ -127,23 +133,24 @@ public class Iteration1Controller extends Application{
 	//Login functionality
 	public void logIn() {
 		if(currentUser != null) {
-			instruct.setText(currentUser.getStudentName() + " must log out first");
-			instruct.setTextFill(Color.RED);
+			status.setText(currentUser.getStudentName() + " must log out first");
+			status.setTextFill(Color.RED);
 		}
 		else {
 			String name = textAccountName.getText();
 			String pass = textPassword.getText();
 			if (jukeBox.authenticateUser(name, pass)) {
-				instruct.setText("Successful Login!");
+				status.setText("Successful Login!");
 				loggedIn = true;
 				currentUser = users.get(jukeBox.locateUser(name));
 				textAccountName.setText("");
 				textPassword.setText("");
-				instruct.setText(currentUser.getNumberOfSongsSelectedToday() + " selected, " + timeConversion(currentUser.getSecondsRemaining()));
+				status.setText(currentUser.getNumberOfSongsSelectedToday() + " selected, " + timeConversion(currentUser.getSecondsRemaining()));
+				status.setTextFill(Color.BLACK);
 			}
 			else {
-				instruct.setText("Invalid, Try Again!");
-				instruct.setTextFill(Color.RED);
+				status.setText("Invalid, Try Again!");
+				status.setTextFill(Color.RED);
 			}
 		}
 	}
@@ -153,11 +160,12 @@ public class Iteration1Controller extends Application{
 		loggedIn = false;
 		textAccountName.setText("");
 		textPassword.setText("");
-		instruct.setText("Login first");
-		instruct.setTextFill(Color.BLACK);
+		status.setText("Login first");
+		status.setTextFill(Color.BLACK);
 		currentUser = null;		
 	}
 	
+	//This class implements a listener for button clicks
 	private class ButtonListener implements EventHandler<ActionEvent> {
 
 		@Override
@@ -199,32 +207,39 @@ public class Iteration1Controller extends Application{
 		}
 	}
 	
+	//this is a helper method for the buttonListener
+	//accepts corresponding song as parameter
+	//and processes that song
 	private void processButton(Song song) {
 		if(song.canBePlayed()) {
-			song.play();
+			song.select();
 			currentUser.songSelect(song);
-			jukeBox.addSongToQueue(currentUser, song);
+			jukeBox.addSongToQueue(song);
 			if(!jukeBox.isPlaying()) {
 				Thread thread = new Thread(jukeBox);
 				thread.start();
 			}
-			instruct.setText(currentUser.getNumberOfSongsSelectedToday() + " selected, " + timeConversion(currentUser.getSecondsRemaining()));	
+			status.setText(currentUser.getNumberOfSongsSelectedToday() + " selected, " + timeConversion(currentUser.getSecondsRemaining()));	
 		}
 		else {
 			songError(song, 2);
 		}
 	}
 	
+	//this method alerts the user if the user is out of song
+	//picks or the song can no longer be selected for the day
+	//errorMessage == 1 means the user is out of selections 
+	//errorMessage == 2 means the song can no longer be selected
 	private void songError(Song song, int errorMessage) {
 		Stage window = new Stage();
 		window.setTitle("Message");
-		window.setMinWidth(250);
+		window.setMinWidth(280);
 		window.setMinHeight(150);
 		window.initModality(Modality.APPLICATION_MODAL);
 		
 		Label label = new Label();
 		if(errorMessage == 1) {
-			label.setText(song.getSongName() + " max plays reached");
+			label.setText(currentUser.getStudentName() + " has reached the limit");
 		}
 		else if(errorMessage == 2) {
 			label.setText(song.getSongName() + " max plays reached");
@@ -242,6 +257,8 @@ public class Iteration1Controller extends Application{
 		window.showAndWait();
 	}
 	
+	//this method is a helper to display the remaining
+	//time the user has on his account in h:mm:ss format
 	private String timeConversion(int totalSeconds) {
 
 	    final int MINUTES_IN_AN_HOUR = 60;
