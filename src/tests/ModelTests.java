@@ -1,12 +1,9 @@
 package tests;
 
 import static org.junit.Assert.*;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
-
 import org.junit.Test;
-
 import model.JukeBox;
 import model.Song;
 import model.Student;
@@ -98,6 +95,11 @@ public class ModelTests {
 		assertEquals(5, songCheck.getSongLength());
 		assertEquals("Pikachu", songCheck.getSongArtist());
 		assertEquals("Capture.mp3", songCheck.getFileName());
+		jukebox.addSongToQueue(new Student("Chris", "1"), songCheck);
+		if(!jukebox.isPlaying()) {
+			Thread thread = new Thread(jukebox);
+			thread.start();
+		}
 	}
 	
 	@Test
@@ -108,5 +110,4 @@ public class ModelTests {
 		assertEquals(90000, studentCheck.getSecondsRemaining());
 		assertEquals(0, studentCheck.getNumberOfSongsSelectedToday());
 	}
-	
 }

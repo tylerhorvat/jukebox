@@ -2,7 +2,6 @@ package controller_view;
 
 import java.util.ArrayList;
 import java.util.Queue;
-
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -32,8 +31,8 @@ public class Iteration1Controller extends Application{
 	ArrayList<Student> users;
 	ArrayList<Song> songList;
 	Queue<Song> songQueue;
-	Button song1;
-	Button song2;
+	Button capture;
+	Button lopingSting;
 	Label accountName;
 	Label password;
 	TextField textAccountName;
@@ -61,10 +60,10 @@ public class Iteration1Controller extends Application{
 
 		// set up song select buttons
 		GridPane songSelect = new GridPane();
-		song1 = new Button("Select song 1");
-		song2 = new Button("Select song 2");
-		songSelect.add(song1, 0, 0);
-		songSelect.add(song2, 1, 0);
+		capture = new Button("Select song 1");
+		lopingSting = new Button("Select song 2");
+		songSelect.add(capture, 0, 0);
+		songSelect.add(lopingSting, 1, 0);
 		songSelect.setHgap(10);
 		songSelect.setAlignment(Pos.CENTER);
 
@@ -110,8 +109,8 @@ public class Iteration1Controller extends Application{
 		// button functionality
 		login.setOnAction(e -> logIn());
 		logout.setOnAction(e -> logOut());
-		song1.setOnAction(new ButtonListener());
-		song2.setOnAction(new ButtonListener());
+		capture.setOnAction(new ButtonListener());
+		lopingSting.setOnAction(new ButtonListener());
 
 		// Don't forget to show the running application:
 		primaryStage.show();
@@ -186,83 +185,51 @@ public class Iteration1Controller extends Application{
 			else {
 				if(currentUser.canSelectSong()) {
 					Button buttonClicked = (Button) arg0.getSource();
-					if(buttonClicked == song1) {
-						Song song = songList.get(0);
-						if(song.canBePlayed()) {
-							song.play();
-							currentUser.songSelect(song);
-							jukeBox.addSongToQueue(currentUser, song);
-							if(!jukeBox.isPlaying()) {
-								//jukeBox.playQueue();
-								Thread thread = new Thread(jukeBox);
-								thread.start();
-							}
-							instruct.setText(currentUser.getNumberOfSongsSelectedToday() + " selected, " + timeConversion(currentUser.getSecondsRemaining()));
-							//System.out.println(songQueue.toString());
-						}
-						else {
-							songPlayError(song);
-						}
+					if(buttonClicked == capture) {
+						processButton(songList.get(0));
 					}
-					else if(buttonClicked == song2) {
-						Song song = songList.get(3);
-						if(song.canBePlayed()) {
-							song.play();
-							currentUser.songSelect(song);
-							jukeBox.addSongToQueue(currentUser, song);
-							if(!jukeBox.isPlaying()) {
-								//jukeBox.playQueue();
-								Thread thread = new Thread(jukeBox);
-								thread.start();
-							}
-							instruct.setText(currentUser.getNumberOfSongsSelectedToday() + " selected, " + timeConversion(currentUser.getSecondsRemaining()));
-							//System.out.println(songQueue.toString());
-						}
-						else {
-							songPlayError(song);
-						}
+					else if(buttonClicked == lopingSting) {
+						processButton(songList.get(3));
 					}
 				}
 				else {
-					userSongError();
-				}
-				
+					songError(null, 1);
+				}	
 			}
-			
+		}
+	}
+	
+	private void processButton(Song song) {
+		if(song.canBePlayed()) {
+			song.play();
+			currentUser.songSelect(song);
+			jukeBox.addSongToQueue(currentUser, song);
+			if(!jukeBox.isPlaying()) {
+				Thread thread = new Thread(jukeBox);
+				thread.start();
+			}
+			instruct.setText(currentUser.getNumberOfSongsSelectedToday() + " selected, " + timeConversion(currentUser.getSecondsRemaining()));	
+		}
+		else {
+			songError(song, 2);
+		}
+	}
+	
+	private void songError(Song song, int errorMessage) {
+		Stage window = new Stage();
+		window.setTitle("Message");
+		window.setMinWidth(250);
+		window.setMinHeight(150);
+		window.initModality(Modality.APPLICATION_MODAL);
+		
+		Label label = new Label();
+		if(errorMessage == 1) {
+			label.setText(song.getSongName() + " max plays reached");
+		}
+		else if(errorMessage == 2) {
+			label.setText(song.getSongName() + " max plays reached");
 		}
 		
-	}
-	
-	private void songPlayError(Song song) {
-		Stage window = new Stage();
-		window.setTitle("Message");
-		window.setMinWidth(250);
-		window.setMinHeight(150);
-		window.initModality(Modality.APPLICATION_MODAL);
-		
-		Label label = new Label();
-		label.setText(song.getSongName() + " max plays reached");
-		Button closeButton = new Button("OK");
-		closeButton.setOnAction(e -> window.close());
-		
-		VBox layout = new VBox(10);
-		layout.getChildren().addAll(label, closeButton);
-		layout.setAlignment(Pos.CENTER);
-		
-		Scene scene = new Scene(layout);
-		window.setScene(scene);
-		window.showAndWait();
-	}
-	
-	private void userSongError() {
-		Stage window = new Stage();
-		window.setTitle("Message");
-		window.setMinWidth(250);
-		window.setMinHeight(150);
-		window.initModality(Modality.APPLICATION_MODAL);
-		
-		Label label = new Label();
-		label.setText(currentUser.getStudentName() + " has reached the limit");
 		Button closeButton = new Button("OK");
 		closeButton.setOnAction(e -> window.close());
 		
@@ -289,6 +256,4 @@ public class Iteration1Controller extends Application{
 
 	    return timeString;
 	}
-
-	
 }

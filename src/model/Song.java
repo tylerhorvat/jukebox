@@ -37,11 +37,8 @@ public class Song {
 	
 	//this method plays the mp3. returns true if the song can be played.
 	//returns false if the song cannot be played
-	public void play() {
-		//this.resetDate();
-		
+	public void play() {		
 			this.timesPlayedToday++;
-			
 	}
 	
 	//checks to see if the saved date is the current date, if not
