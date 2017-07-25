@@ -15,7 +15,9 @@ import java.time.LocalDate;
 
 public class Song {
 
-	/* Globals for Song class*/
+	/********************************************************
+	 * SONG GLOBAL VARIABLES
+	 ********************************************************/
 	private String songName;
 	private int songLength;
 	private String songArtist;
@@ -24,7 +26,10 @@ public class Song {
 	private LocalDate date;
 	private String songFile;
 	
-	//Song constructor
+	/********************************************************
+	 * Song(String songName, int songLength, String songArtist, String fileName)
+	 * SONG CONSTUCTOR
+	 ********************************************************/
 	public Song(String songName, int songLength, String songArtist, String fileName) {
 		this.songName = songName;
 		this.songLength = songLength;
@@ -34,9 +39,12 @@ public class Song {
 		this.date = LocalDate.now();
 		songFile = "songfiles/" + fileName;
 	}
-
-	//determines whether the song can still be
-	//played today
+	
+	/********************************************************
+	 * public boolean canBePlayed()
+	 * determines whether the song can still be
+	 * played today
+	 ********************************************************/
 	public boolean canBePlayed() {
 		this.resetTimesPlayed();
 		if(getTimesPlayedToday() == 3)
@@ -45,54 +53,75 @@ public class Song {
 		return true;
 	}
 	
-	//this method plays the mp3. returns true if the song can be played.
-	//returns false if the song cannot be played
+	/********************************************************
+	 * public int select()
+	 * this method plays the mp3. returns true if the song can be played.
+	 * returns false if the song cannot be played
+	 ********************************************************/
 	public void select() {		
 			this.timesPlayedToday++;
 	}
 	
-	//checks to see if the saved date is the current date, if not
-	//resets the number of times played to 0.
+	/********************************************************
+	 * public int resetTimesPlayed()
+	 * checks to see if the saved date is the current date, if not
+	 * resets the number of times played to 0.
+	 ********************************************************/
 	public void resetTimesPlayed() {
 		if(!date.equals(LocalDate.now())) {
 			this.timesPlayedToday = 0;
 			date = LocalDate.now();
 		}
 	}
-
-	//sets the date
-	//this method is used strictly for testing 
-	//purposes
+	
+	/********************************************************
+	 *  public int getTimesPlayedToday()
+	 *  sets the date
+	 *  this method is used strictly for testing 
+	 *  purposes
+	 ********************************************************/
 	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 	
-	//get number of times played
+	/********************************************************
+	 *  public int getTimesPlayedToday() - returns timesPlayedToday
+	 ********************************************************/
 	public int getTimesPlayedToday() {
 		return timesPlayedToday;
 	}
 
-	//get name of the song
+	/********************************************************
+	 *  public int getSongName() - returns songName
+	 ********************************************************/
 	public String getSongName() {
 		return songName;
 	}
 
-	//get song length
+	/********************************************************
+	 *  public int getSongLength() - returns songLength
+	 ********************************************************/
 	public int getSongLength() {
 		return songLength;
 	}
 
-	//get song artist
+	/********************************************************
+	 *  public int getSongArtist() - returns songArtist
+	 ********************************************************/
 	public String getSongArtist() {
 		return songArtist;
 	}
 
-	//get filename
+	/********************************************************
+	 *  public int getFileName() - returns fileName
+	 ********************************************************/
 	public String getFileName() {
 		return fileName;
 	}
 	
-	//get song file
+	/********************************************************
+	 *  public int getSongFile() - returns songFile
+	 ********************************************************/
 	public String getSongFile() {
 		return songFile;
 	}

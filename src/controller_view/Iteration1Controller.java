@@ -35,7 +35,9 @@ import model.Student;
 
 public class Iteration1Controller extends Application{
 	
-	/* GLOBALS for JukeBox */
+	/********************************************************
+	 * GLOBALS FOR JUKEBOX
+	 ********************************************************/
 	
 	boolean loggedIn;
 	JukeBox jukeBox;
@@ -60,7 +62,9 @@ public class Iteration1Controller extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
-		/* Initializing all Variables */
+		/********************************************************
+		 * INITIALIZING VARIABLES
+		 ********************************************************/
 		jukeBox = new JukeBox();
 		loggedIn = false;
 		users = jukeBox.getUsers();
@@ -69,7 +73,9 @@ public class Iteration1Controller extends Application{
 
 		BorderPane all = new BorderPane();
 
-		// set up song select buttons
+		/********************************************************
+		 * SETTING UP SONG BUTTONS
+		 ********************************************************/
 		GridPane songSelect = new GridPane();
 		capture = new Button("Select song 1");
 		lopingSting = new Button("Select song 2");
@@ -78,7 +84,9 @@ public class Iteration1Controller extends Application{
 		songSelect.setHgap(10);
 		songSelect.setAlignment(Pos.CENTER);
 
-		// set up login area
+		/********************************************************
+		 * LOGIN AREA
+		 ********************************************************/
 		accountName = new Label("Account Name");
 		password = new Label("         Password");
 		textAccountName = new TextField();
@@ -93,7 +101,9 @@ public class Iteration1Controller extends Application{
 		logout = new Button("Log out");
 		status = new Label("Login first");
 
-		// add all login elements to grid
+		/********************************************************
+		 * ADD ELEMENTS TO GRID
+		 ********************************************************/
 		GridPane userInput = new GridPane();
 		userInput.add(accountName, 0, 0);
 		userInput.add(password, 0, 1);
@@ -106,19 +116,25 @@ public class Iteration1Controller extends Application{
 		userInput.setVgap(10);
 		userInput.setAlignment(Pos.CENTER);
 
-		// add everything to borderpane
+		/********************************************************
+		 * ADD ELEMENTS TO BORDERPANE
+		 ********************************************************/
 		all.setTop(songSelect);
 		all.setCenter(userInput);
 		Scene scene = new Scene(all, 300, 230);
 		primaryStage.setScene(scene);
 		
-		// button functionality
+		/********************************************************
+		 * BUTTON FUNTIONALITY
+		 ********************************************************/
 		login.setOnAction(e -> logIn());
 		logout.setOnAction(e -> logOut());
 		capture.setOnAction(new ButtonListener());
 		lopingSting.setOnAction(new ButtonListener());
 
-		// Don't forget to show the running application:
+		/********************************************************
+		 * SHOWING APPLICATION
+		 ********************************************************/
 		primaryStage.show();
 	}
 
@@ -130,7 +146,12 @@ public class Iteration1Controller extends Application{
 	 *  User: Ryan - Pass: 4444
 	 ********************************************************/
 	
-	//Login functionality
+	/********************************************************
+	 *                   public void logIn()
+	 * 	Checks to see if the login credentials are 
+	 *  validated. If they are, successful login will occur
+	 *  else, error.
+	 ********************************************************/
 	public void logIn() {
 		if(currentUser != null) {
 			status.setText(currentUser.getStudentName() + " must log out first");
@@ -155,7 +176,10 @@ public class Iteration1Controller extends Application{
 		}
 	}
 	
-	//Logout functionality
+	/********************************************************
+	 *                   public void logOut()
+	 * 	Logs out the current user if logged in.
+	 ********************************************************/
 	public void logOut() {
 		loggedIn = false;
 		textAccountName.setText("");
@@ -165,7 +189,10 @@ public class Iteration1Controller extends Application{
 		currentUser = null;		
 	}
 	
-	//This class implements a listener for button clicks
+	/********************************************************
+	 *               handle(ActionEvent arg0)
+	 * 	Implements a button listener for button clicks.
+	 ********************************************************/
 	private class ButtonListener implements EventHandler<ActionEvent> {
 
 		@Override
@@ -207,9 +234,13 @@ public class Iteration1Controller extends Application{
 		}
 	}
 	
-	//this is a helper method for the buttonListener
-	//accepts corresponding song as parameter
-	//and processes that song
+	/********************************************************
+	 *               processButton(Song song)
+	 *                   
+	 * 	 this is a helper method for the buttonListener
+	 *   accepts corresponding song as parameter
+	 *   and processes that song
+	 ********************************************************/
 	private void processButton(Song song) {
 		if(song.canBePlayed()) {
 			song.select();
@@ -226,10 +257,14 @@ public class Iteration1Controller extends Application{
 		}
 	}
 	
-	//this method alerts the user if the user is out of song
-	//picks or the song can no longer be selected for the day
-	//errorMessage == 1 means the user is out of selections 
-	//errorMessage == 2 means the song can no longer be selected
+	/********************************************************
+	 *         void songError(Song song, int errorMessage)
+	 *                   
+	 * 	this method alerts the user if the user is out of song
+	 *  picks or the song can no longer be selected for the day
+	 *  errorMessage == 1 means the user is out of selections 
+	 *  errorMessage == 2 means the song can no longer be selected
+	 ********************************************************/
 	private void songError(Song song, int errorMessage) {
 		Stage window = new Stage();
 		window.setTitle("Message");
@@ -257,8 +292,12 @@ public class Iteration1Controller extends Application{
 		window.showAndWait();
 	}
 	
-	//this method is a helper to display the remaining
-	//time the user has on his account in h:mm:ss format
+	/********************************************************
+	 *      timeConversion(int totalSeconds)
+	 *                   
+	 * 	this method is a helper to display the remaining
+	 *  time the user has on his account in h:mm:ss format
+	 ********************************************************/
 	private String timeConversion(int totalSeconds) {
 
 	    final int MINUTES_IN_AN_HOUR = 60;

@@ -16,14 +16,19 @@ import java.time.LocalDate;
 
 public class Student {
 
-	/*Globals for Student class*/
+	/********************************************************
+	 * GLOBALS
+	 ********************************************************/
 	private String studentName;
 	private String studentPassword;
 	private int numberOfSongsSelectedToday;
 	private int secondsRemaining;
 	private LocalDate date;
 	
-	//Student constructor
+	/********************************************************
+	 * public boolean Student(String name, String password)
+	 * Studen constructor
+	 ********************************************************/
 	public Student(String name, String password) {
 		this.studentName = name;
 		this.studentPassword = password;
@@ -32,8 +37,11 @@ public class Student {
 		this.date = LocalDate.now();
 	}
 	
-	//Determines if the Student can select more songs for the day
-	//returns true if the Student can, otherwise false
+	/********************************************************
+	 * public boolean canSelectSong() 
+	 * Determines if the Student can select more songs for the day
+	 * returns true if the Student can, otherwise false
+	 ********************************************************/
 	public boolean canSelectSong() {
 		resetSongsSelected();
 		if(getNumberOfSongsSelectedToday() == 3) {
@@ -42,45 +50,66 @@ public class Student {
 		return true;
 	}
 	
-	//This method determines if the saved date is the current
-	//date. if it is not, resets, the number of songs selected
-	//to zero.
+	/********************************************************
+	 * public void resetSongsSelected() 
+	 * This method determines if the saved date is the current
+	 * date. if it is not, resets, the number of songs selected
+	 * to zero.
+	 ********************************************************/
 	public void resetSongsSelected() {
 		if(!date.equals(LocalDate.now())) {
 			this.numberOfSongsSelectedToday = 0;
 			this.date = LocalDate.now();
 		}
 	}
-
-	//updates number of songs selected today and decreases
-	//the students time remaining based on the song length
-	//that was selected
+	
+	/********************************************************
+	 * public void songSelect() 
+	 * updates number of songs selected today and decreases
+	 * the students time remaining based on the song length
+	 * that was selected
+	 ********************************************************/
 	public void songSelect(Song song) {
 		this.numberOfSongsSelectedToday++;
 		this.secondsRemaining -= song.getSongLength();
 	}
 	
-	//this method sets the date. used strictly for JUnit testing
+	/********************************************************
+	 * public boolean getStudentName() 
+	 * used for J-Unit Testing
+	 ********************************************************/
 	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 
-	//get student name
+	/********************************************************
+	 * public boolean getStudentName() 
+	 * get studentName
+	 ********************************************************/
 	public String getStudentName() {
 		return studentName;
 	}
 
-	//get student password
+	/********************************************************
+	 * public boolean getStudentPassword() 
+	 * get studentPassword
+	 ********************************************************/
 	public String getStudentPassword() {
 		return studentPassword;
 	}
 
-	//get number of songs selected today
+	/********************************************************
+	 * public boolean getNumberOfSongsSelectedToday() 
+	 * get numberOfSongsSelectedToday
+	 ********************************************************/
 	public int getNumberOfSongsSelectedToday() {
 		return numberOfSongsSelectedToday;
 	}
 
-	//get seconds remaining on student account
+	/********************************************************
+	 * public boolean getSecondsRemaining()
+	 * get seconds remaining on student account
+	 ********************************************************/
 	public int getSecondsRemaining() {
 		return secondsRemaining;
 	}
