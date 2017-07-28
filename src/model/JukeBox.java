@@ -15,22 +15,17 @@ package model;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import controller_view.Iteration1Controller;													
+import javafx.application.Platform;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-public class JukeBox implements Runnable {
+public class JukeBox extends Thread/*implements Runnable */{
 
 	/********************************************************
 	 * JUKEBOX GLOBALS
 	 ********************************************************/
-	ObservableList<Song> songQueue;
-	//Queue<Song> songQueue;
-	//ObservableList<Song> observableSongs;// =  FXCollections.observableQueue(songQueue);
+	ArrayList<Song> songQueue;
 	ArrayList<Song> songList; 
 	ArrayList<Student> users;
 	boolean isPlaying;
@@ -40,7 +35,7 @@ public class JukeBox implements Runnable {
 	 * JUKEBOX CONSTRUCTOR
 	 ********************************************************/
 	public JukeBox() {
-		songQueue = FXCollections.observableArrayList();
+		songQueue = new ArrayList<Song>();
 		songList = new ArrayList<>();
 		users = new ArrayList<>();
 		addStudents();
@@ -88,7 +83,11 @@ public class JukeBox implements Runnable {
 	 * adds song to queue
 	 ********************************************************/
 	public void addSongToQueue(Song song) {
-			songQueue.add(song);		
+			songQueue.add(song);
+			//listView.getItems().add(song);
+			//listView.refresh();
+			Iteration1Controller.getListView().getItems().add(song);
+			Iteration1Controller.getListView().refresh();
 	}
 	
 	/********************************************************
@@ -103,7 +102,7 @@ public class JukeBox implements Runnable {
 	 * Queue<Song> getSongQueue()
 	 * returns the song queue
 	 ********************************************************/
-	public ObservableList<Song> getSongQueue() {
+	public ArrayList<Song> getSongQueue() {
 		return songQueue;
 	}
 
@@ -189,9 +188,16 @@ public class JukeBox implements Runnable {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+		    
 			songQueue.remove(0);
+
+			 Platform.runLater(new Runnable() {
+		            @Override public void run() {
+		            	Iteration1Controller.getListView().getItems().remove(0);
+		            	Iteration1Controller.getListView().refresh();
+		            }
+		        });
 		}
 		isPlaying = false;
 	}
-
 }

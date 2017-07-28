@@ -15,6 +15,11 @@ import java.time.LocalDate;
 
 public class Song {
 
+	@Override
+	public String toString() {
+		return "Song: " + songName + " Artist: " + songArtist + " Length: " + songLength;
+	}
+
 	/********************************************************
 	 * SONG GLOBAL VARIABLES
 	 ********************************************************/
@@ -125,4 +130,6 @@ public class Song {
 	public String getSongFile() {
 		return songFile;
 	}
+	
+	
 }

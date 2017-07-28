@@ -13,8 +13,8 @@
 package controller_view;
 
 import java.util.ArrayList;
-import java.util.Queue;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -22,6 +22,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -30,6 +32,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import model.JukeBox;
 import model.Song;
 import model.Student;
@@ -41,10 +44,14 @@ public class Iteration1Controller extends Application {
 	 ********************************************************/
 	
 	boolean loggedIn;
+	public static ListView<Song> getListView() {
+		return listView;
+	}
+
 	JukeBox jukeBox;
 	ArrayList<Student> users;
 	ArrayList<Song> songList;
-	ObservableList<Song> songQueue;
+	ArrayList<Song> songQueue;
 	Button capture;
 	Button lopingSting;
 	Label accountName;
@@ -55,6 +62,8 @@ public class Iteration1Controller extends Application {
 	Button logout;
 	Label status;
 	Student currentUser;
+	static ListView<Song> listView;
+	ObservableList<Song> observableSongs;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -116,17 +125,45 @@ public class Iteration1Controller extends Application {
 		userInput.setHgap(10);
 		userInput.setVgap(10);
 		userInput.setAlignment(Pos.CENTER);
+		
+		//list view
+		observableSongs = FXCollections.observableArrayList(songQueue);
+		listView = new ListView<>();
+		listView.setItems(observableSongs);
+		listView.setCellFactory(new Callback<ListView<Song>, ListCell<Song>> () {
+
+			@Override
+			public ListCell<Song> call(ListView<Song> arg0) {
+
+				ListCell<Song> cell = new ListCell<Song>() {
+					
+					@Override
+					protected void updateItem(Song t, boolean bln) {
+						super.updateItem(t, bln);
+						if(t != null) {
+							setText(t.toString());
+						}
+						else {
+							setText(null);
+						}
+					}
+				};
+				return cell;
+			}
+			
+		});
 
 		/********************************************************
 		 * ADD ELEMENTS TO BORDERPANE
 		 ********************************************************/
 		all.setTop(songSelect);
 		all.setCenter(userInput);
-		Scene scene = new Scene(all, 300, 230);
+		all.setBottom(listView);
+		Scene scene = new Scene(all, 800, 500);
 		primaryStage.setScene(scene);
 		
 		/********************************************************
-		 * BUTTON FUNTIONALITY
+		 * BUTTON FUNCTIONALITY
 		 ********************************************************/
 		login.setOnAction(e -> logIn());
 		logout.setOnAction(e -> logOut());
@@ -247,6 +284,7 @@ public class Iteration1Controller extends Application {
 			song.select();
 			currentUser.songSelect(song);
 			jukeBox.addSongToQueue(song);
+			listView.refresh();
 			if(!jukeBox.isPlaying()) {
 				Thread thread = new Thread(jukeBox);
 				thread.start();
