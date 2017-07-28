@@ -15,6 +15,7 @@ package controller_view;
 import java.util.ArrayList;
 import java.util.Queue;
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -33,7 +34,7 @@ import model.JukeBox;
 import model.Song;
 import model.Student;
 
-public class Iteration1Controller extends Application{
+public class Iteration1Controller extends Application {
 	
 	/********************************************************
 	 * GLOBALS FOR JUKEBOX
@@ -43,7 +44,7 @@ public class Iteration1Controller extends Application{
 	JukeBox jukeBox;
 	ArrayList<Student> users;
 	ArrayList<Song> songList;
-	Queue<Song> songQueue;
+	ObservableList<Song> songQueue;
 	Button capture;
 	Button lopingSting;
 	Label accountName;
