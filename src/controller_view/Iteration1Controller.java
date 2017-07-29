@@ -19,6 +19,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -126,10 +127,16 @@ public class Iteration1Controller extends Application {
 		userInput.setVgap(10);
 		userInput.setAlignment(Pos.CENTER);
 		
+		BorderPane listPane = new BorderPane();
 		//list view
 		observableSongs = FXCollections.observableArrayList(songQueue);
 		listView = new ListView<>();
 		listView.setItems(observableSongs);
+		//listView.setMaxHeight(80);
+		listPane.setCenter(listView);
+		listPane.setBottom(new Label("\n\n"));
+		
+		listView.setMaxSize(600, 200);
 		listView.setCellFactory(new Callback<ListView<Song>, ListCell<Song>> () {
 
 			@Override
@@ -158,7 +165,9 @@ public class Iteration1Controller extends Application {
 		 ********************************************************/
 		all.setTop(songSelect);
 		all.setCenter(userInput);
-		all.setBottom(listView);
+		//listPane.setAlignment(Pos.CENTER);
+		all.setBottom(listPane);
+		//all.setAlignment(listView, Pos.CENTER);
 		Scene scene = new Scene(all, 800, 500);
 		primaryStage.setScene(scene);
 		

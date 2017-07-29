@@ -14,10 +14,10 @@ package model;
 import java.time.LocalDate;
 
 public class Song {
-
+	
 	@Override
 	public String toString() {
-		return "Song: " + songName + " Artist: " + songArtist + " Length: " + songLength;
+		return String.format("%-30s %30s     %20s", songName, songArtist, timeConversion());
 	}
 
 	/********************************************************
@@ -131,5 +131,18 @@ public class Song {
 		return songFile;
 	}
 	
-	
+	private String timeConversion() {
+
+	    //final int MINUTES_IN_AN_HOUR = 60;
+	    final int SECONDS_IN_A_MINUTE = 60;
+
+	    int seconds = songLength % SECONDS_IN_A_MINUTE;
+	    int totalMinutes = songLength / SECONDS_IN_A_MINUTE;
+	    //int minutes = totalMinutes % MINUTES_IN_AN_HOUR;
+	    //int hours = totalMinutes / MINUTES_IN_AN_HOUR;
+	    
+	    String timeString = String.format("%d:%02d", totalMinutes, seconds);
+
+	    return timeString;
+	}
 }
