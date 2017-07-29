@@ -131,5 +131,9 @@ public class Song {
 		return songFile;
 	}
 	
+	public void addNumberPlayed() {
+		timesPlayedToday++;
+	}
+	
 	
 }

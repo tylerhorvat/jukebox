@@ -15,6 +15,7 @@ package controller_view;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -25,7 +26,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -36,6 +39,7 @@ import javafx.util.Callback;
 import model.JukeBox;
 import model.Song;
 import model.Student;
+import controller_view.SongTableView;
 
 public class Iteration1Controller extends Application {
 	
@@ -64,11 +68,13 @@ public class Iteration1Controller extends Application {
 	Student currentUser;
 	static ListView<Song> listView;
 	ObservableList<Song> observableSongs;
-
+	SongTableView songTableView;
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
@@ -80,6 +86,7 @@ public class Iteration1Controller extends Application {
 		users = jukeBox.getUsers();
 		songList = jukeBox.getSongList();
 		songQueue = jukeBox.getSongQueue();
+		songTableView = new SongTableView();
 
 		BorderPane all = new BorderPane();
 
@@ -152,14 +159,41 @@ public class Iteration1Controller extends Application {
 			}
 			
 		});
-
+		songTableView.setRowFactory(tv -> {
+		    TableRow<Song> row = new TableRow<>();
+		    row.setOnMouseClicked(event -> {
+		        if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+		        	if (!loggedIn) {
+			    		Alert loginAlert = new Alert("Must login to play songs!");
+			    	}
+		        	else {
+		        		if (!currentUser.canSelectSong()) {
+		        			Alert limitAleart = new Alert("Daily song limit reached!");
+		        		}
+		        		else {
+		        			Song clickedRow = row.getItem();
+		        			processButton(clickedRow);
+		        			System.out.println(clickedRow.getSongName());
+		        			songTableView.refresh();
+		        		}
+		        	}
+		        }
+		    });
+		    return row ;
+		});
+		
+		
+//		Song selectedCells = (Song) songTableView.getSelectionModel().getSelectedCells();
+		
+		
 		/********************************************************
 		 * ADD ELEMENTS TO BORDERPANE
 		 ********************************************************/
-		all.setTop(songSelect);
-		all.setCenter(userInput);
+//		all.setTop(songSelect);
+		all.setTop(userInput);
+		all.setCenter(songTableView);
 		all.setBottom(listView);
-		Scene scene = new Scene(all, 800, 500);
+		Scene scene = new Scene(all, 800, 800);
 		primaryStage.setScene(scene);
 		
 		/********************************************************
@@ -176,6 +210,7 @@ public class Iteration1Controller extends Application {
 		primaryStage.show();
 	}
 
+
 	/********************************************************
 	 *                   FOR REFERENCE
 	 * 	User: Chris - Pass:  1
@@ -183,7 +218,8 @@ public class Iteration1Controller extends Application {
 	 *  User: River - Pass: 333
 	 *  User: Ryan - Pass: 4444
 	 ********************************************************/
-	
+
+
 	/********************************************************
 	 *                   public void logIn()
 	 * 	Checks to see if the login credentials are 
@@ -236,24 +272,7 @@ public class Iteration1Controller extends Application {
 		@Override
 		public void handle(ActionEvent arg0) {
 			if (loggedIn == false) {
-				Stage window = new Stage();
-				window.setTitle("Message");
-				window.setMinWidth(250);
-				window.setMinHeight(150);
-				window.initModality(Modality.APPLICATION_MODAL);
-				
-				Label label = new Label();
-				label.setText("User must login to play a song.");
-				Button closeButton = new Button("Okay, got it!");
-				closeButton.setOnAction(e -> window.close());
-				
-				VBox layout = new VBox(10);
-				layout.getChildren().addAll(label, closeButton);
-				layout.setAlignment(Pos.CENTER);
-				
-				Scene scene = new Scene(layout);
-				window.setScene(scene);
-				window.showAndWait();
+				Alert newAlert = new Alert("Must login to play songs!");
 			}
 			else {
 				if(currentUser.canSelectSong()) {
