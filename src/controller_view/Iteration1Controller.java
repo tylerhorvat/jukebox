@@ -19,7 +19,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -31,6 +30,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -55,6 +56,11 @@ public class Iteration1Controller extends Application {
 	ArrayList<Song> songQueue;
 	Button capture;
 	Button lopingSting;
+	Button danseMacabre;
+	Button determinedTumbao;
+	Button swingCheese;
+	Button curtainRises;
+	Button untameableFire;
 	Label accountName;
 	Label password;
 	TextField textAccountName;
@@ -88,10 +94,20 @@ public class Iteration1Controller extends Application {
 		 * SETTING UP SONG BUTTONS
 		 ********************************************************/
 		GridPane songSelect = new GridPane();
-		capture = new Button("Select song 1");
-		lopingSting = new Button("Select song 2");
+		capture = new Button("Pokemon Capture");
+		lopingSting = new Button("Loping Sting");
+		danseMacabre = new Button("Danse Macabre");
+		determinedTumbao = new Button("Determined Tumbao");
+		swingCheese = new Button("Swing Cheese");
+		curtainRises = new Button("The Curtain Rises");
+		untameableFire = new Button("Untameable Fire");
 		songSelect.add(capture, 0, 0);
-		songSelect.add(lopingSting, 1, 0);
+		songSelect.add(danseMacabre, 1, 0);
+		songSelect.add(determinedTumbao, 2, 0);
+		songSelect.add(lopingSting, 0, 1);
+		songSelect.add(swingCheese, 1, 1);
+		songSelect.add(curtainRises, 2, 1);
+		songSelect.add(untameableFire, 3, 1);
 		songSelect.setHgap(10);
 		songSelect.setAlignment(Pos.CENTER);
 
@@ -132,7 +148,10 @@ public class Iteration1Controller extends Application {
 		observableSongs = FXCollections.observableArrayList(songQueue);
 		listView = new ListView<>();
 		listView.setItems(observableSongs);
-		//listView.setMaxHeight(80);
+		Label listLabel = new Label("\t\t   Playlist\n\t\t   Song Name:\t\t\t\t     Artist:\t\t   Length:");
+		listLabel.setTextFill(Color.GREEN);
+		listLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
+		listPane.setTop(listLabel);
 		listPane.setCenter(listView);
 		listPane.setBottom(new Label("\n\n"));
 		
@@ -165,9 +184,7 @@ public class Iteration1Controller extends Application {
 		 ********************************************************/
 		all.setTop(songSelect);
 		all.setCenter(userInput);
-		//listPane.setAlignment(Pos.CENTER);
 		all.setBottom(listPane);
-		//all.setAlignment(listView, Pos.CENTER);
 		Scene scene = new Scene(all, 800, 500);
 		primaryStage.setScene(scene);
 		
@@ -178,7 +195,11 @@ public class Iteration1Controller extends Application {
 		logout.setOnAction(e -> logOut());
 		capture.setOnAction(new ButtonListener());
 		lopingSting.setOnAction(new ButtonListener());
-
+		untameableFire.setOnAction(new ButtonListener());
+		danseMacabre.setOnAction(new ButtonListener());
+		determinedTumbao.setOnAction(new ButtonListener());
+		swingCheese.setOnAction(new ButtonListener());
+		curtainRises.setOnAction(new ButtonListener());
 		/********************************************************
 		 * SHOWING APPLICATION
 		 ********************************************************/
@@ -270,8 +291,23 @@ public class Iteration1Controller extends Application {
 					if(buttonClicked == capture) {
 						processButton(songList.get(0));
 					}
+					else if(buttonClicked == danseMacabre) {
+						processButton(songList.get(1));
+					}
+					else if(buttonClicked == determinedTumbao) {
+						processButton(songList.get(2));
+					}
 					else if(buttonClicked == lopingSting) {
 						processButton(songList.get(3));
+					}
+					else if(buttonClicked == swingCheese) {
+						processButton(songList.get(4));
+					}
+					else if(buttonClicked == curtainRises) {
+						processButton(songList.get(5));
+					}
+					else if(buttonClicked == untameableFire) {
+						processButton(songList.get(6));
 					}
 				}
 				else {

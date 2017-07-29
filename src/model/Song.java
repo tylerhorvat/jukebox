@@ -133,13 +133,10 @@ public class Song {
 	
 	private String timeConversion() {
 
-	    //final int MINUTES_IN_AN_HOUR = 60;
 	    final int SECONDS_IN_A_MINUTE = 60;
 
 	    int seconds = songLength % SECONDS_IN_A_MINUTE;
 	    int totalMinutes = songLength / SECONDS_IN_A_MINUTE;
-	    //int minutes = totalMinutes % MINUTES_IN_AN_HOUR;
-	    //int hours = totalMinutes / MINUTES_IN_AN_HOUR;
 	    
 	    String timeString = String.format("%d:%02d", totalMinutes, seconds);
 

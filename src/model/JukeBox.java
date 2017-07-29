@@ -84,8 +84,6 @@ public class JukeBox extends Thread/*implements Runnable */{
 	 ********************************************************/
 	public void addSongToQueue(Song song) {
 			songQueue.add(song);
-			//listView.getItems().add(song);
-			//listView.refresh();
 			Iteration1Controller.getListView().getItems().add(song);
 			Iteration1Controller.getListView().refresh();
 	}
