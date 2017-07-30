@@ -130,7 +130,7 @@ public class Song {
 	public String getSongFile() {
 		return songFile;
 	}
-	
+
 	private String timeConversion() {
 
 	    final int SECONDS_IN_A_MINUTE = 60;

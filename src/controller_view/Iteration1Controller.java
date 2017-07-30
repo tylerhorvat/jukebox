@@ -15,29 +15,32 @@ package controller_view;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import model.JukeBox;
 import model.Song;
 import model.Student;
+import controller_view.SongTableView;
 
 public class Iteration1Controller extends Application {
 	
@@ -56,11 +59,6 @@ public class Iteration1Controller extends Application {
 	ArrayList<Song> songQueue;
 	Button capture;
 	Button lopingSting;
-	Button danseMacabre;
-	Button determinedTumbao;
-	Button swingCheese;
-	Button curtainRises;
-	Button untameableFire;
 	Label accountName;
 	Label password;
 	TextField textAccountName;
@@ -71,11 +69,13 @@ public class Iteration1Controller extends Application {
 	Student currentUser;
 	static ListView<Song> listView;
 	ObservableList<Song> observableSongs;
-
+	SongTableView songTableView;
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
@@ -87,6 +87,7 @@ public class Iteration1Controller extends Application {
 		users = jukeBox.getUsers();
 		songList = jukeBox.getSongList();
 		songQueue = jukeBox.getSongQueue();
+		songTableView = new SongTableView();
 
 		BorderPane all = new BorderPane();
 
@@ -94,20 +95,10 @@ public class Iteration1Controller extends Application {
 		 * SETTING UP SONG BUTTONS
 		 ********************************************************/
 		GridPane songSelect = new GridPane();
-		capture = new Button("Pokemon Capture");
-		lopingSting = new Button("Loping Sting");
-		danseMacabre = new Button("Danse Macabre");
-		determinedTumbao = new Button("Determined Tumbao");
-		swingCheese = new Button("Swing Cheese");
-		curtainRises = new Button("The Curtain Rises");
-		untameableFire = new Button("Untameable Fire");
+		capture = new Button("Select song 1");
+		lopingSting = new Button("Select song 2");
 		songSelect.add(capture, 0, 0);
-		songSelect.add(danseMacabre, 1, 0);
-		songSelect.add(determinedTumbao, 2, 0);
-		songSelect.add(lopingSting, 0, 1);
-		songSelect.add(swingCheese, 1, 1);
-		songSelect.add(curtainRises, 2, 1);
-		songSelect.add(untameableFire, 3, 1);
+		songSelect.add(lopingSting, 1, 0);
 		songSelect.setHgap(10);
 		songSelect.setAlignment(Pos.CENTER);
 
@@ -143,19 +134,10 @@ public class Iteration1Controller extends Application {
 		userInput.setVgap(10);
 		userInput.setAlignment(Pos.CENTER);
 		
-		BorderPane listPane = new BorderPane();
 		//list view
 		observableSongs = FXCollections.observableArrayList(songQueue);
 		listView = new ListView<>();
 		listView.setItems(observableSongs);
-		Label listLabel = new Label("\t\t   Playlist\n\t\t   Song Name:\t\t\t\t     Artist:\t\t   Length:");
-		listLabel.setTextFill(Color.GREEN);
-		listLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 16));
-		listPane.setTop(listLabel);
-		listPane.setCenter(listView);
-		listPane.setBottom(new Label("\n\n"));
-		
-		listView.setMaxSize(600, 200);
 		listView.setCellFactory(new Callback<ListView<Song>, ListCell<Song>> () {
 
 			@Override
@@ -178,14 +160,41 @@ public class Iteration1Controller extends Application {
 			}
 			
 		});
-
+		songTableView.setRowFactory(tv -> {
+		    TableRow<Song> row = new TableRow<>();
+		    row.setOnMouseClicked(event -> {
+		        if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+		        	if (!loggedIn) {
+			    		//Alert loginAlert = new Alert("Must login to play songs!");
+			    	}
+		        	else {
+		        		if (!currentUser.canSelectSong()) {
+		        			//Alert limitAleart = new Alert("Daily song limit reached!");
+		        		}
+		        		else {
+		        			Song clickedRow = row.getItem();
+		        			processButton(clickedRow);
+		        			System.out.println(clickedRow.getSongName());
+		        			songTableView.refresh();
+		        		}
+		        	}
+		        }
+		    });
+		    return row ;
+		});
+		
+		
+//		Song selectedCells = (Song) songTableView.getSelectionModel().getSelectedCells();
+		
+		
 		/********************************************************
 		 * ADD ELEMENTS TO BORDERPANE
 		 ********************************************************/
-		all.setTop(songSelect);
-		all.setCenter(userInput);
-		all.setBottom(listPane);
-		Scene scene = new Scene(all, 800, 500);
+//		all.setTop(songSelect);
+		all.setTop(userInput);
+		all.setCenter(songTableView);
+		all.setBottom(listView);
+		Scene scene = new Scene(all, 800, 800);
 		primaryStage.setScene(scene);
 		
 		/********************************************************
@@ -195,16 +204,13 @@ public class Iteration1Controller extends Application {
 		logout.setOnAction(e -> logOut());
 		capture.setOnAction(new ButtonListener());
 		lopingSting.setOnAction(new ButtonListener());
-		untameableFire.setOnAction(new ButtonListener());
-		danseMacabre.setOnAction(new ButtonListener());
-		determinedTumbao.setOnAction(new ButtonListener());
-		swingCheese.setOnAction(new ButtonListener());
-		curtainRises.setOnAction(new ButtonListener());
+
 		/********************************************************
 		 * SHOWING APPLICATION
 		 ********************************************************/
 		primaryStage.show();
 	}
+
 
 	/********************************************************
 	 *                   FOR REFERENCE
@@ -213,7 +219,8 @@ public class Iteration1Controller extends Application {
 	 *  User: River - Pass: 333
 	 *  User: Ryan - Pass: 4444
 	 ********************************************************/
-	
+
+
 	/********************************************************
 	 *                   public void logIn()
 	 * 	Checks to see if the login credentials are 
@@ -267,24 +274,7 @@ public class Iteration1Controller extends Application {
 		@Override
 		public void handle(ActionEvent arg0) {
 			if (loggedIn == false) {
-				Stage window = new Stage();
-				window.setTitle("Message");
-				window.setMinWidth(250);
-				window.setMinHeight(150);
-				window.initModality(Modality.APPLICATION_MODAL);
-				
-				Label label = new Label();
-				label.setText("User must login to play a song.");
-				Button closeButton = new Button("Okay, got it!");
-				closeButton.setOnAction(e -> window.close());
-				
-				VBox layout = new VBox(10);
-				layout.getChildren().addAll(label, closeButton);
-				layout.setAlignment(Pos.CENTER);
-				
-				Scene scene = new Scene(layout);
-				window.setScene(scene);
-				window.showAndWait();
+				//Alert newAlert = new Alert(null, "Must login to play songs!", null);
 			}
 			else {
 				if(currentUser.canSelectSong()) {
@@ -292,23 +282,8 @@ public class Iteration1Controller extends Application {
 					if(buttonClicked == capture) {
 						processButton(songList.get(0));
 					}
-					else if(buttonClicked == danseMacabre) {
-						processButton(songList.get(1));
-					}
-					else if(buttonClicked == determinedTumbao) {
-						processButton(songList.get(2));
-					}
 					else if(buttonClicked == lopingSting) {
 						processButton(songList.get(3));
-					}
-					else if(buttonClicked == swingCheese) {
-						processButton(songList.get(4));
-					}
-					else if(buttonClicked == curtainRises) {
-						processButton(songList.get(5));
-					}
-					else if(buttonClicked == untameableFire) {
-						processButton(songList.get(6));
 					}
 				}
 				else {
