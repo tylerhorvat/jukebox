@@ -1,7 +1,7 @@
 /*
  * Class: Iteration1Controller.java
  * Project: JukeBox - Iteration 1
- * CSC 335 July 25, 2017
+ * CSC 335 July 30, 2017
  * Authors: Hayden Monarch
  * 			Tyler Horvat
  * 
@@ -15,13 +15,9 @@ package controller_view;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -47,18 +43,11 @@ public class Iteration1Controller extends Application {
 	/********************************************************
 	 * GLOBALS FOR JUKEBOX
 	 ********************************************************/
-	
 	boolean loggedIn;
-	public static ListView<Song> getListView() {
-		return listView;
-	}
-
 	JukeBox jukeBox;
 	ArrayList<Student> users;
 	ArrayList<Song> songList;
 	ArrayList<Song> songQueue;
-	Button capture;
-	Button lopingSting;
 	Label accountName;
 	Label password;
 	TextField textAccountName;
@@ -75,7 +64,7 @@ public class Iteration1Controller extends Application {
 		launch(args);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "unused" })
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
@@ -87,20 +76,11 @@ public class Iteration1Controller extends Application {
 		users = jukeBox.getUsers();
 		songList = jukeBox.getSongList();
 		songQueue = jukeBox.getSongQueue();
+		listView = new ListView<>();
 		songTableView = new SongTableView();
-
+		
 		BorderPane all = new BorderPane();
-
-		/********************************************************
-		 * SETTING UP SONG BUTTONS
-		 ********************************************************/
-		GridPane songSelect = new GridPane();
-		capture = new Button("Select song 1");
-		lopingSting = new Button("Select song 2");
-		songSelect.add(capture, 0, 0);
-		songSelect.add(lopingSting, 1, 0);
-		songSelect.setHgap(10);
-		songSelect.setAlignment(Pos.CENTER);
+		
 
 		/********************************************************
 		 * LOGIN AREA
@@ -123,20 +103,35 @@ public class Iteration1Controller extends Application {
 		 * ADD ELEMENTS TO GRID
 		 ********************************************************/
 		GridPane userInput = new GridPane();
-		userInput.add(accountName, 0, 0);
-		userInput.add(password, 0, 1);
-		userInput.add(textAccountName, 1, 0);
-		userInput.add(textPassword, 1, 1);
-		userInput.add(login, 1, 2);
-		userInput.add(status, 1, 3);
-		userInput.add(logout, 1, 4);
+		userInput.add(new Label(""), 0, 0);
+		userInput.add(accountName, 0, 1);
+		userInput.add(password, 0, 2);
+		userInput.add(textAccountName, 1, 1);
+		userInput.add(textPassword, 1, 2);
+		userInput.add(login, 1, 3);
+		userInput.add(status, 1, 4);
+		userInput.add(logout, 1, 5);
+		userInput.add(new Label(""), 0, 6);
 		userInput.setHgap(10);
 		userInput.setVgap(10);
 		userInput.setAlignment(Pos.CENTER);
 		
-		//list view
+		Label direction = new Label("Double Click to add song to playlist                                                        ");
+		direction.setTextFill(Color.DARKSLATEBLUE);
+		Label listLabel = new Label("Playlist:");
+		listLabel.setTextFill(Color.DARKSLATEBLUE);
+		
+		GridPane views = new GridPane();
+		views.add(direction, 1, 1);
+		views.add(songTableView, 1, 2);
+		views.add(listLabel, 1, 3);
+		views.add(listView, 1, 4);
+		views.add(new Label("    "), 0, 5);
+		
+		/********************************************************
+		 * SET UP LIST VIEW
+		 ********************************************************/
 		observableSongs = FXCollections.observableArrayList(songQueue);
-		listView = new ListView<>();
 		listView.setItems(observableSongs);
 		listView.setCellFactory(new Callback<ListView<Song>, ListCell<Song>> () {
 
@@ -158,23 +153,25 @@ public class Iteration1Controller extends Application {
 				};
 				return cell;
 			}
-			
 		});
+		
+		/********************************************************
+		 * SET UP TABLE VIEW
+		 ********************************************************/
 		songTableView.setRowFactory(tv -> {
 		    TableRow<Song> row = new TableRow<>();
 		    row.setOnMouseClicked(event -> {
 		        if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
 		        	if (!loggedIn) {
-			    		//Alert loginAlert = new Alert("Must login to play songs!");
+			    		Alert loginAlert = new Alert("Must login to play songs!");
 			    	}
 		        	else {
 		        		if (!currentUser.canSelectSong()) {
-		        			//Alert limitAleart = new Alert("Daily song limit reached!");
+		        			Alert limitAleart = new Alert("Daily song limit reached!");
 		        		}
 		        		else {
 		        			Song clickedRow = row.getItem();
 		        			processButton(clickedRow);
-		        			System.out.println(clickedRow.getSongName());
 		        			songTableView.refresh();
 		        		}
 		        	}
@@ -183,18 +180,14 @@ public class Iteration1Controller extends Application {
 		    return row ;
 		});
 		
-		
-//		Song selectedCells = (Song) songTableView.getSelectionModel().getSelectedCells();
-		
-		
 		/********************************************************
 		 * ADD ELEMENTS TO BORDERPANE
 		 ********************************************************/
-//		all.setTop(songSelect);
 		all.setTop(userInput);
-		all.setCenter(songTableView);
-		all.setBottom(listView);
-		Scene scene = new Scene(all, 800, 800);
+		all.setCenter(views);
+		//all.setCenter(songTableView);
+		//all.setBottom(listView);
+		Scene scene = new Scene(all, 500, 800);
 		primaryStage.setScene(scene);
 		
 		/********************************************************
@@ -202,15 +195,12 @@ public class Iteration1Controller extends Application {
 		 ********************************************************/
 		login.setOnAction(e -> logIn());
 		logout.setOnAction(e -> logOut());
-		capture.setOnAction(new ButtonListener());
-		lopingSting.setOnAction(new ButtonListener());
 
 		/********************************************************
 		 * SHOWING APPLICATION
 		 ********************************************************/
 		primaryStage.show();
 	}
-
 
 	/********************************************************
 	 *                   FOR REFERENCE
@@ -266,37 +256,9 @@ public class Iteration1Controller extends Application {
 	}
 	
 	/********************************************************
-	 *               handle(ActionEvent arg0)
-	 * 	Implements a button listener for button clicks.
-	 ********************************************************/
-	private class ButtonListener implements EventHandler<ActionEvent> {
-
-		@Override
-		public void handle(ActionEvent arg0) {
-			if (loggedIn == false) {
-				//Alert newAlert = new Alert(null, "Must login to play songs!", null);
-			}
-			else {
-				if(currentUser.canSelectSong()) {
-					Button buttonClicked = (Button) arg0.getSource();
-					if(buttonClicked == capture) {
-						processButton(songList.get(0));
-					}
-					else if(buttonClicked == lopingSting) {
-						processButton(songList.get(3));
-					}
-				}
-				else {
-					songError(null, 1);
-				}	
-			}
-		}
-	}
-	
-	/********************************************************
 	 *               processButton(Song song)
 	 *                   
-	 * 	 this is a helper method for the buttonListener
+	 * 	 this is a helper method for the tableView
 	 *   accepts corresponding song as parameter
 	 *   and processes that song
 	 ********************************************************/
@@ -371,5 +333,13 @@ public class Iteration1Controller extends Application {
 	    String timeString = String.format("%02d:%02d:%02d", hours, minutes, seconds);
 
 	    return timeString;
+	}
+	
+	/********************************************************
+	 * public static ListView<Song> getListView() - 
+	 * returns listView
+	 ********************************************************/
+	public static ListView<Song> getListView() {
+		return listView;
 	}
 }

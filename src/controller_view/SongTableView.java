@@ -1,7 +1,16 @@
+/*
+ * Class: Song.java
+ * Project: JukeBox
+ * CSC 335 July 30, 2017
+ * Authors: Hayden Monarch
+ * 			Tyler Horvat
+ * 
+ * This class implements a TableView for the GUI.
+ */
+
 package controller_view;
 
 import java.util.ArrayList;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
@@ -10,7 +19,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import model.JukeBox;
 import model.Song;
 
-public class SongTableView extends TableView{
+@SuppressWarnings("rawtypes")
+public class SongTableView extends TableView {
 	
 	/********************************************************
 	 * SongViewTable GLOBALS
@@ -20,6 +30,7 @@ public class SongTableView extends TableView{
 	
 	ArrayList<Song> songList;
 	
+	@SuppressWarnings("unchecked")
 	public SongTableView() {
 		
 		/********************************************************
@@ -28,14 +39,14 @@ public class SongTableView extends TableView{
 		TableColumn<Song, Integer> timesPlayedToday = new TableColumn<Song, Integer>("Plays");
 		TableColumn<Song, String> songName = new TableColumn<Song, String>("Title");
 		TableColumn<Song, String> songArtist = new TableColumn<Song, String>("Artist");
-		TableColumn<Song, Integer> songLength = new TableColumn<Song, Integer>("Time");
+		TableColumn<Song, String> songLength = new TableColumn<Song, String>("Time");
 		
 		this.getColumns().addAll(timesPlayedToday,songName,songArtist,songLength);
 		
 		timesPlayedToday.setCellValueFactory(new PropertyValueFactory<Song, Integer>("timesPlayedToday"));
 		songName.setCellValueFactory(new PropertyValueFactory<Song, String>("songName"));
 		songArtist.setCellValueFactory(new PropertyValueFactory<Song, String>("songArtist"));
-		songLength.setCellValueFactory(new PropertyValueFactory<Song, Integer>("songLength"));
+		songLength.setCellValueFactory(new PropertyValueFactory<Song, String>("length"));
 		
 		/********************************************************
 		 * Initializing

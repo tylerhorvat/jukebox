@@ -1,3 +1,13 @@
+/*
+ * Class: Alert.java
+ * Project: JukeBox
+ * CSC 335 July 30, 2017
+ * Authors: Hayden Monarch
+ * 			Tyler Horvat
+ * 
+ * This class implements an Alert object that displays an alert when created.
+ */
+
 package controller_view;
 
 import javafx.geometry.Pos;

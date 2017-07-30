@@ -1,7 +1,7 @@
 /*
  * Class: Song.java
  * Project: JukeBox
- * CSC 335 July 25, 2017
+ * CSC 335 July 30, 2017
  * Authors: Hayden Monarch
  * 			Tyler Horvat
  * 
@@ -14,11 +14,6 @@ package model;
 import java.time.LocalDate;
 
 public class Song {
-	
-	@Override
-	public String toString() {
-		return String.format("%-30s %30s     %20s", songName, songArtist, timeConversion());
-	}
 
 	/********************************************************
 	 * SONG GLOBAL VARIABLES
@@ -30,6 +25,7 @@ public class Song {
 	private int timesPlayedToday;
 	private LocalDate date;
 	private String songFile;
+	private String length;
 	
 	/********************************************************
 	 * Song(String songName, int songLength, String songArtist, String fileName)
@@ -43,6 +39,7 @@ public class Song {
 		this.timesPlayedToday = 0;
 		this.date = LocalDate.now();
 		songFile = "songfiles/" + fileName;
+		setLength(timeConversion());
 	}
 	
 	/********************************************************
@@ -69,14 +66,41 @@ public class Song {
 	
 	/********************************************************
 	 * public int resetTimesPlayed()
-	 * checks to see if the saved date is the current date, if not
-	 * resets the number of times played to 0.
+	 * checks to see if the saved date is the current date, if 
+	 * not resets the number of times played to 0.
 	 ********************************************************/
 	public void resetTimesPlayed() {
 		if(!date.equals(LocalDate.now())) {
 			this.timesPlayedToday = 0;
 			date = LocalDate.now();
 		}
+	}
+
+	/********************************************************
+	 *      timeConversion()
+	 *                 
+	 * 	this method is a helper to display the length of
+	 *  a song in m:ss format
+	 ********************************************************/
+	private String timeConversion() {
+
+	    final int SECONDS_IN_A_MINUTE = 60;
+
+	    int seconds = songLength % SECONDS_IN_A_MINUTE;
+	    int totalMinutes = songLength / SECONDS_IN_A_MINUTE;
+	    
+	    String timeString = String.format("%d:%02d", totalMinutes, seconds);
+
+	    return timeString;
+	}
+	
+	/********************************************************
+	 * public String toString()
+	 * toString method used for listView
+	 ********************************************************/
+	@Override
+	public String toString() {
+		return String.format("%-20s %20s     %10s", songName, songArtist, timeConversion());
 	}
 	
 	/********************************************************
@@ -131,15 +155,17 @@ public class Song {
 		return songFile;
 	}
 
-	private String timeConversion() {
+	/********************************************************
+	 *  public String getLength - returns length
+	 ********************************************************/
+	public String getLength() {
+		return length;
+	}
 
-	    final int SECONDS_IN_A_MINUTE = 60;
-
-	    int seconds = songLength % SECONDS_IN_A_MINUTE;
-	    int totalMinutes = songLength / SECONDS_IN_A_MINUTE;
-	    
-	    String timeString = String.format("%d:%02d", totalMinutes, seconds);
-
-	    return timeString;
+	/********************************************************
+	 *  public void setLength - sets length
+	 ********************************************************/
+	public void setLength(String length) {
+		this.length = length;
 	}
 }

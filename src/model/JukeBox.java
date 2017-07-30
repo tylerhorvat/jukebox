@@ -1,7 +1,7 @@
 /*
  * Class: JukeBox.java
  * Project: JukeBox
- * CSC 335 July 25, 2017
+ * CSC 335 July 30, 2017
  * Authors: Hayden Monarch
  * 			Tyler Horvat
  * 
@@ -20,7 +20,7 @@ import javafx.application.Platform;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-public class JukeBox extends Thread/*implements Runnable */{
+public class JukeBox extends Thread {
 
 	/********************************************************
 	 * JUKEBOX GLOBALS
