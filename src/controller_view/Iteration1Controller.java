@@ -234,6 +234,7 @@ public class Iteration1Controller extends Application {
 				currentUser = users.get(jukeBox.locateUser(name));
 				textAccountName.setText("");
 				textPassword.setText("");
+				currentUser.resetSongsSelected();
 				status.setText(currentUser.getNumberOfSongsSelectedToday() + " selected, " + timeConversion(currentUser.getSecondsRemaining()));
 				status.setTextFill(Color.BLACK);
 			}
