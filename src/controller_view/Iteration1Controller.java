@@ -282,6 +282,12 @@ public class Iteration1Controller extends Application implements Serializable {
 			JukeBox.setUserList(studentList);
 			songTableView.refresh();
 			
+//			JukeBox jukeBox = (JukeBox) inFile.readObject();
+//			@SuppressWarnings("static-access")
+//			ArrayList<Student> studentList = jukeBox.getStudentList();
+//			jukeBox.setUserList(studentList);
+//			System.out.println(studentList);
+			
 			inFile.close();
 		} catch (IOException ioe) {
 			System.out.println(ioe);

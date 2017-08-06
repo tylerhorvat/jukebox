@@ -224,8 +224,4 @@ public class JukeBox extends Thread implements Serializable {
 	public static ArrayList<Student> getStudentList() {
 		return users;
 	}
-	
-	public static JukeBox getJukeBoxList() {
-		return jukeBox;
-	}
 }
