@@ -58,7 +58,7 @@ public class JukeBox extends Thread {
 	 * returns the index of that user
 	 * if the user does not exist, returns -1
 	 ********************************************************/
-	public int locateUser(String name) {
+	public static int locateUser(String name) {
 		
 		for(int i = 0; i < users.size(); i++) {
 			if(users.get(i).getStudentName().equals(name))
@@ -125,9 +125,8 @@ public class JukeBox extends Thread {
 	 * ArrayList<Student> getUsers()
 	 * returns the user list
 	 ********************************************************/
-	public ArrayList<Student> getUsers() {
-		return users;
-	}
+	
+	
 
 	/********************************************************
 	 * public void addStudents()
@@ -138,8 +137,13 @@ public class JukeBox extends Thread {
 		users.add(devon);
 		users.add(river);
 		users.add(ryan);
+		users.add(alex);
 	}
 	
+	public static ArrayList<Student> getUsers() {
+		return users;
+	}
+
 	/********************************************************
 	 * public void addSongs()
 	 * adds each song to the songList
@@ -157,10 +161,11 @@ public class JukeBox extends Thread {
 	/********************************************************
 	 * CREATING NEW STUDENTS
 	 ********************************************************/
-	static Student chris = new Student("Chris", "1");
-	static Student devon = new Student("Devon", "22");
-	static Student river = new Student("River", "333");
-	static Student ryan = new Student("Ryan", "4444");
+	static Student chris = new Student("Chris", "1", false);
+	static Student devon = new Student("Devon", "22", false);
+	static Student river = new Student("River", "333", false);
+	static Student ryan = new Student("Ryan", "4444", false);
+	static Student alex = new Student("Alex", "12345", true);
 	
 	/********************************************************
 	 * CREATING NEW SONGS

@@ -51,6 +51,10 @@ public class Iteration1Controller extends Application {
 	 * GLOBALS FOR JUKEBOX
 	 ********************************************************/
 	boolean loggedIn;
+	public static Student getCurrentUser() {
+		return currentUser;
+	}
+
 	JukeBox jukeBox;
 	ArrayList<Student> users;
 	ArrayList<Song> songList;
@@ -62,7 +66,7 @@ public class Iteration1Controller extends Application {
 	Button login;
 	Button logout;
 	Label status;
-	Student currentUser;
+	static Student currentUser;
 	static ListView<Song> listView;
 	ObservableList<Song> observableSongs;
 	SongTableView songTableView;
@@ -80,7 +84,7 @@ public class Iteration1Controller extends Application {
 		 ********************************************************/
 		jukeBox = JukeBox.getJukeBox();
 		loggedIn = false;
-		users = jukeBox.getUsers();
+		users = JukeBox.getUsers();
 		songList = jukeBox.getSongList();
 		songQueue = jukeBox.getSongQueue();
 		listView = new ListView<>();
@@ -97,8 +101,8 @@ public class Iteration1Controller extends Application {
 		textAccountName = new TextField();
 		textPassword = new PasswordField();
 
-		textAccountName.setMaxWidth(150);
-		textPassword.setMaxWidth(150);
+		textAccountName.setMaxWidth(185);
+		textPassword.setMaxWidth(185);
 		textAccountName.setMaxHeight(10);
 		textPassword.setMaxHeight(10);
 
@@ -121,8 +125,27 @@ public class Iteration1Controller extends Application {
 		userInput.add(new Label(""), 0, 6);
 		userInput.setHgap(10);
 		userInput.setVgap(10);
-		userInput.setAlignment(Pos.CENTER);
 		
+		
+		BorderPane adminButtons = new BorderPane();
+		adminButtons.setTop(null);
+		adminButtons.setBottom(new Label(" "));
+		Button addUser = new Button("Add User");
+		Button deleteUser = new Button("Delete User");
+		addUser.setOnAction(e -> new AddUser());
+		deleteUser.setOnAction(e -> new RemoveUser());
+		//Button resetPassword = new Button("Reset Password");
+		GridPane admin = new GridPane();
+		admin.add(addUser, 0, 0);
+		admin.add(deleteUser, 1, 0);
+		//admin.add(resetPassword, 0, 1);
+		admin.setHgap(10);
+		admin.setVgap(10);
+		admin.setAlignment(Pos.CENTER);
+		
+		userInput.setAlignment(Pos.CENTER);
+		userInput.add(adminButtons, 1, 6);
+		userInput.add(new Label(""), 1, 7);
 		Label direction = new Label("Double Click to add song to playlist                                                        ");
 		direction.setTextFill(Color.DARKSLATEBLUE);
 		Label listLabel = new Label("Playlist:");
@@ -216,8 +239,8 @@ public class Iteration1Controller extends Application {
 		/********************************************************
 		 * BUTTON FUNCTIONALITY
 		 ********************************************************/
-		login.setOnAction(e -> logIn());
-		logout.setOnAction(e -> logOut());
+		login.setOnAction(e -> logIn(adminButtons, admin));
+		logout.setOnAction(e -> logOut(adminButtons));
 
 		/********************************************************
 		 * SHOWING APPLICATION
@@ -255,7 +278,7 @@ public class Iteration1Controller extends Application {
 	 *  validated. If they are, successful login will occur
 	 *  else, error.
 	 ********************************************************/
-	public void logIn() {
+	public void logIn(BorderPane adminButtons, GridPane admin) {
 		if(currentUser != null) {
 			status.setText(currentUser.getStudentName() + " must log out first");
 			status.setTextFill(Color.RED);
@@ -266,12 +289,17 @@ public class Iteration1Controller extends Application {
 			if (jukeBox.authenticateUser(name, pass)) {
 				status.setText("Successful Login!");
 				loggedIn = true;
-				currentUser = users.get(jukeBox.locateUser(name));
+				users = JukeBox.getUsers();
+				currentUser = users.get(JukeBox.locateUser(name));
 				textAccountName.setText("");
 				textPassword.setText("");
 				currentUser.resetSongsSelected();
 				status.setText(currentUser.getNumberOfSongsSelectedToday() + " selected, " + timeConversion(currentUser.getSecondsRemaining()));
 				status.setTextFill(Color.BLACK);
+				
+				if(currentUser.isAdmin()) {
+					adminButtons.setTop(admin);
+				}
 			}
 			else {
 				status.setText("Invalid, Try Again!");
@@ -284,13 +312,18 @@ public class Iteration1Controller extends Application {
 	 *                   public void logOut()
 	 * 	Logs out the current user if logged in.
 	 ********************************************************/
-	public void logOut() {
+	public void logOut(BorderPane adminButtons) {
 		loggedIn = false;
+		/*if(currentUser.isAdmin()) {
+			users = JukeBox.getUsers();
+		}*/
 		textAccountName.setText("");
 		textPassword.setText("");
 		status.setText("Login first");
 		status.setTextFill(Color.BLACK);
 		currentUser = null;		
+		adminButtons.setTop(null);
+		
 	}
 	
 	/********************************************************

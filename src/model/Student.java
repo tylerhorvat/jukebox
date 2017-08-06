@@ -24,17 +24,24 @@ public class Student {
 	private int numberOfSongsSelectedToday;
 	private int secondsRemaining;
 	private LocalDate date;
-		
+	private boolean admin;
+	private String administrator = "No";
+
+	public String getAdministrator() {
+		return administrator;
+	}
+
 	/********************************************************
 	 * public boolean Student(String name, String password)
 	 * Student constructor
 	 ********************************************************/
-	public Student(String name, String password) {
+	public Student(String name, String password, boolean admin) {
 		this.studentName = name;
 		this.studentPassword = password;
 		this.secondsRemaining = 90000;
 		this.numberOfSongsSelectedToday = 0;
 		this.date = LocalDate.now();
+		setAdmin(admin);
 	}
 	
 	/********************************************************
@@ -112,5 +119,17 @@ public class Student {
 	 ********************************************************/
 	public int getSecondsRemaining() {
 		return secondsRemaining;
+	}
+	
+	public boolean isAdmin() {
+		return admin;
+	}
+
+	private void setAdmin(boolean admin) {
+		this.admin = admin;
+		if(admin) {
+			this.administrator = "Yes";
+		}
+		
 	}
 }
