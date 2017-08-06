@@ -20,6 +20,8 @@ import javafx.stage.Stage;
 import model.JukeBox;
 import model.Student;
 
+import controller_view.AlertMe;
+
 public class AddUser {
 
 	UserView users;
@@ -120,19 +122,19 @@ public class AddUser {
 		password.trim();
 		
 		if(name.isEmpty()) {
-			Alert alert = new Alert("You must enter a user name!");
+			AlertMe alert = new AlertMe("You must enter a user name!");
 		}
 		else if(password.isEmpty()) {
-			Alert alert = new Alert("You must enter a user password!");
+			AlertMe alert = new AlertMe("You must enter a user password!");
 		}
 		else if(admin == null) {
-			Alert alert = new Alert("You must select an account type!");
+			AlertMe alert = new AlertMe("You must select an account type!");
 		}
 		else {
 			ArrayList<Student> students = JukeBox.getUsers();
 			
 			if(JukeBox.locateUser(name) != -1) {
-				Alert alert = new Alert("User " + name + " already exists!");
+				AlertMe alert = new AlertMe("User " + name + " already exists!");
 			}
 			else {
 				Student newStudent;

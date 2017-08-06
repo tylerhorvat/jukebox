@@ -12,6 +12,12 @@
 
 package controller_view;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -45,7 +51,7 @@ import model.Song;
 import model.Student;
 import controller_view.SongTableView;
 
-public class Iteration1Controller extends Application {
+public class Iteration1Controller extends Application implements Serializable {
 	
 	/********************************************************
 	 * GLOBALS FOR JUKEBOX
@@ -68,8 +74,8 @@ public class Iteration1Controller extends Application {
 	Label status;
 	static Student currentUser;
 	static ListView<Song> listView;
-	ObservableList<Song> observableSongs;
-	SongTableView songTableView;
+	static ObservableList<Song> observableSongs;
+	static SongTableView songTableView;
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -225,6 +231,8 @@ public class Iteration1Controller extends Application {
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			public void handle(WindowEvent we) {
 				System.out.println("App closing");
+				writeJukeBox();
+				System.out.println("Written");
 			}
 		});
 		
@@ -248,7 +256,7 @@ public class Iteration1Controller extends Application {
 		primaryStage.show();
 	}
 
-	private static void handlePersistence() {
+	private static void handlePersistence() throws ClassNotFoundException {
 	    Alert alert = new Alert(AlertType.CONFIRMATION);
 	    alert.setTitle("Start Up Option");
 	    alert.setHeaderText("Start with initial state?");
@@ -259,9 +267,40 @@ public class Iteration1Controller extends Application {
 	    if (result.get() == ButtonType.OK) {
 	    	
 	    } else {   
-	    	
+	    	readJukeBox();
 	    }
 	  }
+	
+	private static void readJukeBox() throws ClassNotFoundException {
+		try {
+			FileInputStream rawBytes = new FileInputStream("persistentObjects");
+			ObjectInputStream inFile = new ObjectInputStream(rawBytes);
+			
+			@SuppressWarnings("unchecked")
+			ArrayList<Student> studentList = (ArrayList<Student>) inFile.readObject();
+			System.out.println(studentList);
+			JukeBox.setUserList(studentList);
+			songTableView.refresh();
+			
+			inFile.close();
+		} catch (IOException ioe) {
+			System.out.println(ioe);
+		}		
+	}
+
+	private void writeJukeBox() {
+		try {
+			FileOutputStream bytesToDisk = new FileOutputStream("persistentObjects");
+			ObjectOutputStream outFile = new ObjectOutputStream(bytesToDisk);
+			
+			outFile.writeObject(JukeBox.getStudentList());
+			
+			outFile.close();
+		} catch (IOException ioe) {
+			System.out.println(ioe);
+		}
+		
+	}
 
 	/********************************************************
 	 *                   FOR REFERENCE

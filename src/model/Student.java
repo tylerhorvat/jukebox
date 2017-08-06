@@ -12,9 +12,10 @@
 
 package model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Student {
+public class Student implements Serializable {
 
 	/********************************************************
 	 * GLOBALS
@@ -131,5 +132,9 @@ public class Student {
 			this.administrator = "Yes";
 		}
 		
+	}
+	
+	public String toString() {
+		return studentName + ", " + studentPassword;
 	}
 }

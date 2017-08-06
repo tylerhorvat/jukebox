@@ -1,5 +1,6 @@
 package controller_view;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,13 +10,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import model.JukeBox;
 import model.Student;
 
-public class UserView extends TableView {
+public class UserView extends TableView implements Serializable {
 
 	/********************************************************
 	 * SongViewTable GLOBALS
 	 ********************************************************/
-	private ObservableList<Student> student;
-	ArrayList<Student> studentList;
+	private static ObservableList<Student> student;
+	static ArrayList<Student> studentList;
 	
 	@SuppressWarnings("unchecked")
 	public UserView() {
@@ -45,10 +46,4 @@ public class UserView extends TableView {
 
 		this.setItems(student);
 	}
-
-	public ArrayList<Student> getStudentList() {
-		return studentList;
-	}
-
-
 }

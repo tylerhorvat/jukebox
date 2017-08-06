@@ -16,7 +16,7 @@ import model.Student;
 
 import java.util.ArrayList;
 
-import controller_view.Alert;
+import controller_view.AlertMe;
 
 public class RemoveUser {
 
@@ -73,10 +73,10 @@ public class RemoveUser {
 		Student studentClicked = (Student) users.getSelectionModel().getSelectedItem();
 		
 		if(studentClicked == null) {
-			Alert alert = new Alert("Must select user to delete!");
+			AlertMe alert = new AlertMe("Must select user to delete!");
 		}
 		else if(studentClicked.getStudentName().equals(Iteration1Controller.getCurrentUser().getStudentName())) {
-			Alert alert = new Alert("You can't delete yourself!");
+			AlertMe alert = new AlertMe("You can't delete yourself!");
 		}
 		else {
 			

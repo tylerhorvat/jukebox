@@ -13,14 +13,17 @@
 package model;
 
 import java.io.File;
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
-import controller_view.Iteration1Controller;													
+import controller_view.Iteration1Controller;
+import controller_view.SongTableView;
+import controller_view.UserView;
 import javafx.application.Platform;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-public class JukeBox extends Thread {
+public class JukeBox extends Thread implements Serializable {
 
 	/********************************************************
 	 * JUKEBOX GLOBALS
@@ -211,5 +214,18 @@ public class JukeBox extends Thread {
 		        });
 		}
 		isPlaying = false;
+	}
+	
+	public static void setUserList(ArrayList<Student> studentList) {
+		users.clear();
+		users = studentList;
+	}
+	
+	public static ArrayList<Student> getStudentList() {
+		return users;
+	}
+	
+	public static JukeBox getJukeBoxList() {
+		return jukeBox;
 	}
 }
