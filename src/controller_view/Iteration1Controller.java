@@ -17,7 +17,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -51,7 +50,7 @@ import model.Song;
 import model.Student;
 import controller_view.SongTableView;
 
-public class Iteration1Controller extends Application implements Serializable {
+public class Iteration1Controller extends Application {
 	
 	/********************************************************
 	 * GLOBALS FOR JUKEBOX
@@ -74,7 +73,7 @@ public class Iteration1Controller extends Application implements Serializable {
 	Label status;
 	static Student currentUser;
 	static ListView<Song> listView;
-	static ObservableList<Song> observableSongs;
+	ObservableList<Song> observableSongs;
 	static SongTableView songTableView;
 	
 	public static void main(String[] args) {
@@ -88,7 +87,7 @@ public class Iteration1Controller extends Application implements Serializable {
 		/********************************************************
 		 * INITIALIZING VARIABLES
 		 ********************************************************/
-		jukeBox = JukeBox.getJukeBox();
+		jukeBox = new JukeBox();
 		loggedIn = false;
 		users = JukeBox.getUsers();
 		songList = jukeBox.getSongList();
@@ -140,11 +139,10 @@ public class Iteration1Controller extends Application implements Serializable {
 		Button deleteUser = new Button("Delete User");
 		addUser.setOnAction(e -> new AddUser());
 		deleteUser.setOnAction(e -> new RemoveUser());
-		//Button resetPassword = new Button("Reset Password");
+		
 		GridPane admin = new GridPane();
 		admin.add(addUser, 0, 0);
 		admin.add(deleteUser, 1, 0);
-		//admin.add(resetPassword, 0, 1);
 		admin.setHgap(10);
 		admin.setVgap(10);
 		admin.setAlignment(Pos.CENTER);
@@ -223,24 +221,6 @@ public class Iteration1Controller extends Application implements Serializable {
 		all.setCenter(views);
 		//all.setCenter(songTableView);
 		//all.setBottom(listView);
-		
-		
-		/********************************************************
-		 * Write to file
-		 ********************************************************/		
-		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-			public void handle(WindowEvent we) {
-				System.out.println("App closing");
-				writeJukeBox();
-				System.out.println("Written");
-			}
-		});
-		
-		/********************************************************
-		 * HANDLE PERSISTENCE
-		 ********************************************************/
-		handlePersistence();
-		
 		Scene scene = new Scene(all, 500, 800);
 		primaryStage.setScene(scene);
 		
@@ -249,11 +229,20 @@ public class Iteration1Controller extends Application implements Serializable {
 		 ********************************************************/
 		login.setOnAction(e -> logIn(adminButtons, admin));
 		logout.setOnAction(e -> logOut(adminButtons));
+		
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		      public void handle(WindowEvent we) {
+		        // Write the student collection to a file
+		        System.out.println("App closing");
+		        writeJukeBox();
+		      }
+		});
 
 		/********************************************************
 		 * SHOWING APPLICATION
 		 ********************************************************/
 		primaryStage.show();
+		handlePersistence();
 	}
 
 	private static void handlePersistence() throws ClassNotFoundException {
@@ -359,9 +348,6 @@ public class Iteration1Controller extends Application implements Serializable {
 	 ********************************************************/
 	public void logOut(BorderPane adminButtons) {
 		loggedIn = false;
-		/*if(currentUser.isAdmin()) {
-			users = JukeBox.getUsers();
-		}*/
 		textAccountName.setText("");
 		textPassword.setText("");
 		status.setText("Login first");

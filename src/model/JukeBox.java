@@ -39,7 +39,7 @@ public class JukeBox extends Thread implements Serializable {
 	 * JukeBox()
 	 * JUKEBOX CONSTRUCTOR
 	 ********************************************************/
-	private JukeBox() {
+	public JukeBox() {
 		songQueue = new ArrayList<Song>();
 		songList = new ArrayList<>();
 		users = new ArrayList<>();
