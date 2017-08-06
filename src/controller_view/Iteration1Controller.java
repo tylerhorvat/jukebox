@@ -12,25 +12,13 @@
 
 package controller_view;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Optional;
-
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -44,14 +32,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import model.JukeBox;
 import model.Song;
 import model.Student;
 import controller_view.SongTableView;
 
-public class Iteration1Controller extends Application implements Serializable {
+public class Iteration1Controller extends Application {
 	
 	/********************************************************
 	 * GLOBALS FOR JUKEBOX
@@ -74,8 +61,8 @@ public class Iteration1Controller extends Application implements Serializable {
 	Label status;
 	static Student currentUser;
 	static ListView<Song> listView;
-	static ObservableList<Song> observableSongs;
-	static SongTableView songTableView;
+	ObservableList<Song> observableSongs;
+	SongTableView songTableView;
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -88,7 +75,7 @@ public class Iteration1Controller extends Application implements Serializable {
 		/********************************************************
 		 * INITIALIZING VARIABLES
 		 ********************************************************/
-		jukeBox = JukeBox.getJukeBox();
+		jukeBox = new JukeBox();
 		loggedIn = false;
 		users = JukeBox.getUsers();
 		songList = jukeBox.getSongList();
@@ -140,11 +127,10 @@ public class Iteration1Controller extends Application implements Serializable {
 		Button deleteUser = new Button("Delete User");
 		addUser.setOnAction(e -> new AddUser());
 		deleteUser.setOnAction(e -> new RemoveUser());
-		//Button resetPassword = new Button("Reset Password");
+		
 		GridPane admin = new GridPane();
 		admin.add(addUser, 0, 0);
 		admin.add(deleteUser, 1, 0);
-		//admin.add(resetPassword, 0, 1);
 		admin.setHgap(10);
 		admin.setVgap(10);
 		admin.setAlignment(Pos.CENTER);
@@ -223,24 +209,6 @@ public class Iteration1Controller extends Application implements Serializable {
 		all.setCenter(views);
 		//all.setCenter(songTableView);
 		//all.setBottom(listView);
-		
-		
-		/********************************************************
-		 * Write to file
-		 ********************************************************/		
-		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-			public void handle(WindowEvent we) {
-				System.out.println("App closing");
-				writeJukeBox();
-				System.out.println("Written");
-			}
-		});
-		
-		/********************************************************
-		 * HANDLE PERSISTENCE
-		 ********************************************************/
-		handlePersistence();
-		
 		Scene scene = new Scene(all, 500, 800);
 		primaryStage.setScene(scene);
 		
@@ -254,52 +222,6 @@ public class Iteration1Controller extends Application implements Serializable {
 		 * SHOWING APPLICATION
 		 ********************************************************/
 		primaryStage.show();
-	}
-
-	private static void handlePersistence() throws ClassNotFoundException {
-	    Alert alert = new Alert(AlertType.CONFIRMATION);
-	    alert.setTitle("Start Up Option");
-	    alert.setHeaderText("Start with initial state?");
-	    alert.setContentText("Press ok while system testing.");
-	    Optional<ButtonType> result = alert.showAndWait();
-
-	    // TODO: Either read the saved student collection or start with default
-	    if (result.get() == ButtonType.OK) {
-	    	
-	    } else {   
-	    	readJukeBox();
-	    }
-	  }
-	
-	private static void readJukeBox() throws ClassNotFoundException {
-		try {
-			FileInputStream rawBytes = new FileInputStream("persistentObjects");
-			ObjectInputStream inFile = new ObjectInputStream(rawBytes);
-			
-			@SuppressWarnings("unchecked")
-			ArrayList<Student> studentList = (ArrayList<Student>) inFile.readObject();
-			System.out.println(studentList);
-			JukeBox.setUserList(studentList);
-			songTableView.refresh();
-			
-			inFile.close();
-		} catch (IOException ioe) {
-			System.out.println(ioe);
-		}		
-	}
-
-	private void writeJukeBox() {
-		try {
-			FileOutputStream bytesToDisk = new FileOutputStream("persistentObjects");
-			ObjectOutputStream outFile = new ObjectOutputStream(bytesToDisk);
-			
-			outFile.writeObject(JukeBox.getStudentList());
-			
-			outFile.close();
-		} catch (IOException ioe) {
-			System.out.println(ioe);
-		}
-		
 	}
 
 	/********************************************************
@@ -353,9 +275,6 @@ public class Iteration1Controller extends Application implements Serializable {
 	 ********************************************************/
 	public void logOut(BorderPane adminButtons) {
 		loggedIn = false;
-		/*if(currentUser.isAdmin()) {
-			users = JukeBox.getUsers();
-		}*/
 		textAccountName.setText("");
 		textPassword.setText("");
 		status.setText("Login first");
