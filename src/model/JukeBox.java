@@ -27,7 +27,7 @@ public class JukeBox extends Thread {
 	 ********************************************************/
 	ArrayList<Song> songQueue;
 	ArrayList<Song> songList; 
-	ArrayList<Student> users;
+	static ArrayList<Student> users;
 	boolean isPlaying;
 	
 	/********************************************************
@@ -49,7 +49,7 @@ public class JukeBox extends Thread {
 	 * returns the index of that user
 	 * if the user does not exist, returns -1
 	 ********************************************************/
-	public int locateUser(String name) {
+	public static int locateUser(String name) {
 		
 		for(int i = 0; i < users.size(); i++) {
 			if(users.get(i).getStudentName().equals(name))
@@ -116,9 +116,8 @@ public class JukeBox extends Thread {
 	 * ArrayList<Student> getUsers()
 	 * returns the user list
 	 ********************************************************/
-	public ArrayList<Student> getUsers() {
-		return users;
-	}
+	
+	
 
 	/********************************************************
 	 * public void addStudents()
@@ -129,8 +128,13 @@ public class JukeBox extends Thread {
 		users.add(devon);
 		users.add(river);
 		users.add(ryan);
+		users.add(alex);
 	}
 	
+	public static ArrayList<Student> getUsers() {
+		return users;
+	}
+
 	/********************************************************
 	 * public void addSongs()
 	 * adds each song to the songList
@@ -148,10 +152,11 @@ public class JukeBox extends Thread {
 	/********************************************************
 	 * CREATING NEW STUDENTS
 	 ********************************************************/
-	Student chris = new Student("Chris", "1");
-	Student devon = new Student("Devon", "22");
-	Student river = new Student("River", "333");
-	Student ryan = new Student("Ryan", "4444");
+	Student chris = new Student("Chris", "1", false);
+	Student devon = new Student("Devon", "22", false);
+	Student river = new Student("River", "333", false);
+	Student ryan = new Student("Ryan", "4444", false);
+	Student alex = new Student("Alex", "12345", true);
 	
 	/********************************************************
 	 * CREATING NEW SONGS

@@ -25,7 +25,7 @@ public class ModelTests {
 		JukeBox jukebox = new JukeBox();
 		ArrayList<Song> songs = jukebox.getSongList();
 		Song theSong = songs.get(0);
-		Student student = new Student("Chris", "1");
+		Student student = new Student("Chris", "1", false);
 		assertTrue(student.canSelectSong());
 		student.songSelect(theSong);
 		assertTrue(student.canSelectSong());
