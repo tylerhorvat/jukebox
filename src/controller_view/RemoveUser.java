@@ -86,7 +86,7 @@ public class RemoveUser {
 			window.setMinHeight(150);
 			window.initModality(Modality.APPLICATION_MODAL);
 			
-			Label message = new Label("\n       Are you sure you want to delete user " + studentClicked.getStudentName() + "?\n");
+			Label message = new Label("\n       Are you sure you want to delete " + studentClicked.getStudentName() + "'s account?\n");
 			Button ok = new Button("Do it");
 			Button cancel = new Button("Cancel");
 			
