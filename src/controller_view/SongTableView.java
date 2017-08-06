@@ -52,7 +52,7 @@ public class SongTableView extends TableView {
 		 * Initializing
 		 ********************************************************/
 	
-		jukeBox = new JukeBox();		
+		jukeBox = JukeBox.getJukeBox();		
 		songList = jukeBox.getSongList();
 		songs = FXCollections.observableArrayList(songList);
 		

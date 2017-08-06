@@ -18,8 +18,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class Alert {
-	public Alert(String message) {
+public class AlertMe {
+	public AlertMe(String message) {
 		Stage window = new Stage();
 		window.setTitle("Message");
 		window.setMinWidth(250);

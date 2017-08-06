@@ -22,7 +22,7 @@ public class ModelTests {
 
 	@Test
 	public void userSelectSongThreeTimes() {
-		JukeBox jukebox = new JukeBox();
+		JukeBox jukebox = JukeBox.getJukeBox();
 		ArrayList<Song> songs = jukebox.getSongList();
 		Song theSong = songs.get(0);
 		Student student = new Student("Chris", "1");
@@ -72,7 +72,7 @@ public class ModelTests {
 	
 	@Test
 	public void locateUserTest() {
-		JukeBox jukebox = new JukeBox();
+		JukeBox jukebox = JukeBox.getJukeBox();
 		assertEquals(-1, jukebox.locateUser("chris"));
 		assertEquals(-1, jukebox.locateUser("devon"));
 		assertEquals(-1, jukebox.locateUser("river"));
@@ -81,7 +81,7 @@ public class ModelTests {
 	
 	@Test
 	public void authenticateUserTest() {
-		JukeBox jukebox = new JukeBox();
+		JukeBox jukebox = JukeBox.getJukeBox();
 		assertTrue(jukebox.authenticateUser("Chris", "1"));
 		assertTrue(jukebox.authenticateUser("Devon", "22"));
 		assertTrue(jukebox.authenticateUser("River", "333"));
@@ -98,7 +98,7 @@ public class ModelTests {
 	
 	@Test
 	public void getSongInfo() {
-		JukeBox jukebox = new JukeBox();
+		JukeBox jukebox = JukeBox.getJukeBox();
 		ArrayList<Song> songs = jukebox.getSongList();
 		Song songCheck = songs.get(0);
 		assertEquals("Pokemon Capture", songCheck.getSongName());
@@ -114,7 +114,7 @@ public class ModelTests {
 	
 	@Test
 	public void getStudentInfo() {
-		JukeBox jukebox = new JukeBox();
+		JukeBox jukebox = JukeBox.getJukeBox();
 		ArrayList<Student> students = jukebox.getUsers();
 		Student studentCheck = students.get(0);
 		assertEquals(90000, studentCheck.getSecondsRemaining());

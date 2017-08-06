@@ -25,22 +25,31 @@ public class JukeBox extends Thread {
 	/********************************************************
 	 * JUKEBOX GLOBALS
 	 ********************************************************/
-	ArrayList<Song> songQueue;
-	ArrayList<Song> songList; 
-	ArrayList<Student> users;
-	boolean isPlaying;
+	static ArrayList<Song> songQueue;
+	static ArrayList<Song> songList; 
+	static ArrayList<Student> users;
+	static boolean isPlaying;
+	
+	private static JukeBox jukeBox = null;
 	
 	/********************************************************
 	 * JukeBox()
 	 * JUKEBOX CONSTRUCTOR
 	 ********************************************************/
-	public JukeBox() {
+	private JukeBox() {
 		songQueue = new ArrayList<Song>();
 		songList = new ArrayList<>();
 		users = new ArrayList<>();
 		addStudents();
 		addSongs();
 		isPlaying = false;
+	}
+	
+	public static JukeBox getJukeBox() {
+		if (jukeBox == null) {
+			jukeBox = new JukeBox();
+		}
+		return jukeBox;
 	}
 	
 	/********************************************************
@@ -124,7 +133,7 @@ public class JukeBox extends Thread {
 	 * public void addStudents()
 	 * adds each user to the arrayList.
 	 ********************************************************/
-	public void addStudents() {
+	public static void addStudents() {
 		users.add(chris);
 		users.add(devon);
 		users.add(river);
@@ -135,7 +144,7 @@ public class JukeBox extends Thread {
 	 * public void addSongs()
 	 * adds each song to the songList
 	 ********************************************************/
-	public void addSongs() {
+	public static void addSongs() {
 		songList.add(pokemonCapture);
 		songList.add(danseMacabre);
 		songList.add(determinedTumbao);
@@ -148,21 +157,21 @@ public class JukeBox extends Thread {
 	/********************************************************
 	 * CREATING NEW STUDENTS
 	 ********************************************************/
-	Student chris = new Student("Chris", "1");
-	Student devon = new Student("Devon", "22");
-	Student river = new Student("River", "333");
-	Student ryan = new Student("Ryan", "4444");
+	static Student chris = new Student("Chris", "1");
+	static Student devon = new Student("Devon", "22");
+	static Student river = new Student("River", "333");
+	static Student ryan = new Student("Ryan", "4444");
 	
 	/********************************************************
 	 * CREATING NEW SONGS
 	 ********************************************************/
-	Song pokemonCapture = new Song("Pokemon Capture", 5, "Pikachu", "Capture.mp3");
-	Song danseMacabre = new Song("Danse Macabre", 34, "Kevin MacLeod", "DanseMacabreViolinHook.mp3");
-	Song determinedTumbao = new Song("Determined Tumbao", 20, "FreePlay Music", "DeterminedTumbao.mp3");
-	Song lopingSting = new Song("Loping Sting", 5, "Kevin MacLeod", "LopingSting.mp3");
-	Song swingCheese = new Song("Swing Cheese", 15, "FreePlay Music", "SwingCheese.mp3");
-	Song theCurtainRises = new Song("The Curtain Rises", 28, "Kevin MacLeod", "TheCurtainRises.mp3");
-	Song untameableFire = new Song("Untameable Fire", 282, "Pierre Langer", "UntameableFire.mp3");
+	static Song pokemonCapture = new Song("Pokemon Capture", 5, "Pikachu", "Capture.mp3");
+	static Song danseMacabre = new Song("Danse Macabre", 34, "Kevin MacLeod", "DanseMacabreViolinHook.mp3");
+	static Song determinedTumbao = new Song("Determined Tumbao", 20, "FreePlay Music", "DeterminedTumbao.mp3");
+	static Song lopingSting = new Song("Loping Sting", 5, "Kevin MacLeod", "LopingSting.mp3");
+	static Song swingCheese = new Song("Swing Cheese", 15, "FreePlay Music", "SwingCheese.mp3");
+	static Song theCurtainRises = new Song("The Curtain Rises", 28, "Kevin MacLeod", "TheCurtainRises.mp3");
+	static Song untameableFire = new Song("Untameable Fire", 282, "Pierre Langer", "UntameableFire.mp3");
 
 	/********************************************************
 	 * PLAYS EVERY SONG IN THE QUEUE

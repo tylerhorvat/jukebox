@@ -13,12 +13,18 @@
 package controller_view;
 
 import java.util.ArrayList;
+import java.util.Optional;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -32,6 +38,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import model.JukeBox;
 import model.Song;
@@ -71,7 +78,7 @@ public class Iteration1Controller extends Application {
 		/********************************************************
 		 * INITIALIZING VARIABLES
 		 ********************************************************/
-		jukeBox = new JukeBox();
+		jukeBox = JukeBox.getJukeBox();
 		loggedIn = false;
 		users = jukeBox.getUsers();
 		songList = jukeBox.getSongList();
@@ -163,11 +170,11 @@ public class Iteration1Controller extends Application {
 		    row.setOnMouseClicked(event -> {
 		        if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
 		        	if (!loggedIn) {
-			    		Alert loginAlert = new Alert("Must login to play songs!");
+			    		AlertMe loginAlert = new AlertMe("Must login to play songs!");
 			    	}
 		        	else {
 		        		if (!currentUser.canSelectSong()) {
-		        			Alert limitAleart = new Alert("Daily song limit reached!");
+		        			AlertMe limitAleart = new AlertMe("Daily song limit reached!");
 		        		}
 		        		else {
 		        			Song clickedRow = row.getItem();
@@ -187,6 +194,22 @@ public class Iteration1Controller extends Application {
 		all.setCenter(views);
 		//all.setCenter(songTableView);
 		//all.setBottom(listView);
+		
+		
+		/********************************************************
+		 * Write to file
+		 ********************************************************/		
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			public void handle(WindowEvent we) {
+				System.out.println("App closing");
+			}
+		});
+		
+		/********************************************************
+		 * HANDLE PERSISTENCE
+		 ********************************************************/
+		handlePersistence();
+		
 		Scene scene = new Scene(all, 500, 800);
 		primaryStage.setScene(scene);
 		
@@ -201,6 +224,21 @@ public class Iteration1Controller extends Application {
 		 ********************************************************/
 		primaryStage.show();
 	}
+
+	private static void handlePersistence() {
+	    Alert alert = new Alert(AlertType.CONFIRMATION);
+	    alert.setTitle("Start Up Option");
+	    alert.setHeaderText("Start with initial state?");
+	    alert.setContentText("Press ok while system testing.");
+	    Optional<ButtonType> result = alert.showAndWait();
+
+	    // TODO: Either read the saved student collection or start with default
+	    if (result.get() == ButtonType.OK) {
+	    	
+	    } else {   
+	    	
+	    }
+	  }
 
 	/********************************************************
 	 *                   FOR REFERENCE
