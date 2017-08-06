@@ -112,7 +112,7 @@ public class JukeBox extends Thread implements Serializable {
 	 * Queue<Song> getSongQueue()
 	 * returns the song queue
 	 ********************************************************/
-	public ArrayList<Song> getSongQueue() {
+	public static ArrayList<Song> getSongQueue() {
 		return songQueue;
 	}
 
@@ -215,10 +215,15 @@ public class JukeBox extends Thread implements Serializable {
 		}
 		isPlaying = false;
 	}
-	
+	//SET USER LIST 
 	public static void setUserList(ArrayList<Student> studentList) {
 		users.clear();
 		users = studentList;
+	}
+	
+	//SET SONG QUE
+	public static void setSongQueue(ArrayList<Song> queList) {
+		songQueue = queList;
 	}
 	
 	public static ArrayList<Student> getStudentList() {
