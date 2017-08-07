@@ -60,7 +60,7 @@ public class Iteration1Controller extends Application {
 		return currentUser;
 	}
 
-	JukeBox jukeBox;
+	static JukeBox jukeBox;
 	ArrayList<Student> users;
 	ArrayList<Song> songList;
 	ArrayList<Song> songQueue;
@@ -91,7 +91,7 @@ public class Iteration1Controller extends Application {
 		loggedIn = false;
 		users = JukeBox.getUsers();
 		songList = jukeBox.getSongList();
-		songQueue = jukeBox.getSongQueue();
+		songQueue = JukeBox.getSongQueue();
 		listView = new ListView<>();
 		songTableView = new SongTableView();
 		
@@ -234,7 +234,8 @@ public class Iteration1Controller extends Application {
 		      public void handle(WindowEvent we) {
 		        // Write the student collection to a file
 		        System.out.println("App closing");
-		        writeJukeBox();
+		        writeJukeBoxSongs();
+		        writeJukeBoxUsers();
 		      }
 		});
 
@@ -256,13 +257,20 @@ public class Iteration1Controller extends Application {
 	    if (result.get() == ButtonType.OK) {
 	    	
 	    } else {   
-	    	readJukeBox();
+	    	readJukeBoxUsers();
+	    	readJukeBoxSongs();
+	    	
+	    	
+	    		if(!jukeBox.isPlaying()) {
+					Thread thread = new Thread(jukeBox);
+					thread.start();
+				}	    	
 	    }
 	  }
 	
-	private static void readJukeBox() throws ClassNotFoundException {
+	private static void readJukeBoxUsers() throws ClassNotFoundException {
 		try {
-			FileInputStream rawBytes = new FileInputStream("persistentObjects");
+			FileInputStream rawBytes = new FileInputStream("persistentUsers");
 			ObjectInputStream inFile = new ObjectInputStream(rawBytes);
 			
 			@SuppressWarnings("unchecked")
@@ -270,22 +278,72 @@ public class Iteration1Controller extends Application {
 			System.out.println(studentList);
 			JukeBox.setUserList(studentList);
 			songTableView.refresh();
-			
-//			JukeBox jukeBox = (JukeBox) inFile.readObject();
-//			@SuppressWarnings("static-access")
-//			ArrayList<Student> studentList = jukeBox.getStudentList();
-//			jukeBox.setUserList(studentList);
-//			System.out.println(studentList);
+			listView.refresh();
 			
 			inFile.close();
 		} catch (IOException ioe) {
 			System.out.println(ioe);
 		}		
 	}
-
-	private void writeJukeBox() {
+	
+	private static void readJukeBoxSongs() throws ClassNotFoundException {
 		try {
-			FileOutputStream bytesToDisk = new FileOutputStream("persistentObjects");
+			FileInputStream rawBytes = new FileInputStream("persistentQueue");
+			ObjectInputStream inFile = new ObjectInputStream(rawBytes);
+			
+			FileInputStream songRawBytes = new FileInputStream("persistentSongs");
+			ObjectInputStream songInFile = new ObjectInputStream(songRawBytes);
+			
+			@SuppressWarnings("unchecked")
+			ArrayList<Song> songQueue = (ArrayList<Song>) inFile.readObject();
+			System.out.println(songQueue);
+			JukeBox.setSongQueue(songQueue);
+			
+			ArrayList<Song> songList = (ArrayList<Song>) songInFile.readObject();
+			System.out.println(songList);
+			JukeBox.setSongList(songList);
+			
+			listView.setItems(null); 
+			listView.layout(); 
+			ObservableList<Song> data = FXCollections.observableArrayList(songQueue);
+			listView.setItems(data);
+			
+			songTableView.setItems(null); 
+			songTableView.layout(); 
+			ObservableList<Song> songData = FXCollections.observableArrayList(songList);
+			songTableView.setItems(songData);
+			//songTableView.refresh();
+			//listView.refresh();
+			
+			inFile.close();
+		} catch (IOException ioe) {
+			System.out.println(ioe);
+		}		
+	}
+	
+	private void writeJukeBoxSongs() {
+		try {
+			FileOutputStream queueBytesToDisk = new FileOutputStream("persistentQueue");
+			ObjectOutputStream outFile = new ObjectOutputStream(queueBytesToDisk);
+			
+			FileOutputStream songBytesToDisk = new FileOutputStream("persistentSongs");
+			ObjectOutputStream songOutFile = new ObjectOutputStream(songBytesToDisk);
+			
+			outFile.writeObject(JukeBox.getSongQueue());
+			songOutFile.writeObject(jukeBox.getSongList());
+			
+			outFile.close();
+			songOutFile.close();
+			
+		} catch (IOException ioe) {
+			System.out.println(ioe);
+		}
+		
+	}
+	
+	private void writeJukeBoxUsers() {
+		try {
+			FileOutputStream bytesToDisk = new FileOutputStream("persistentUsers");
 			ObjectOutputStream outFile = new ObjectOutputStream(bytesToDisk);
 			
 			outFile.writeObject(JukeBox.getStudentList());
@@ -370,10 +428,11 @@ public class Iteration1Controller extends Application {
 			currentUser.songSelect(song);
 			jukeBox.addSongToQueue(song);
 			listView.refresh();
-			if(!jukeBox.isPlaying()) {
-				Thread thread = new Thread(jukeBox);
-				thread.start();
-			}
+			
+	    		if(!jukeBox.isPlaying()) {
+					Thread thread = new Thread(jukeBox);
+					thread.start();
+				}
 			status.setText(currentUser.getNumberOfSongsSelectedToday() + " selected, " + timeConversion(currentUser.getSecondsRemaining()));	
 		}
 		else {
@@ -443,5 +502,7 @@ public class Iteration1Controller extends Application {
 	 ********************************************************/
 	public static ListView<Song> getListView() {
 		return listView;
+		
 	}
+	
 }

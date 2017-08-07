@@ -112,7 +112,7 @@ public class JukeBox extends Thread implements Serializable {
 	 * Queue<Song> getSongQueue()
 	 * returns the song queue
 	 ********************************************************/
-	public ArrayList<Song> getSongQueue() {
+	public static ArrayList<Song> getSongQueue() {
 		return songQueue;
 	}
 
@@ -130,6 +130,10 @@ public class JukeBox extends Thread implements Serializable {
 	 ********************************************************/
 	
 	
+
+	public static void setSongList(ArrayList<Song> songList) {
+		JukeBox.songList = songList;
+	}
 
 	/********************************************************
 	 * public void addStudents()
@@ -187,38 +191,48 @@ public class JukeBox extends Thread implements Serializable {
 	@Override
 	public void run() {
 		//plays all songs in queue
-		while(!songQueue.isEmpty()) {
-			isPlaying = true;
-			Song song = songQueue.get(0);
-			File file = new File(song.getSongFile());
-		    URI uri = file.toURI();
-		    
-		    Media media = new Media(uri.toString());
-		    MediaPlayer mediaPlayer = new MediaPlayer(media);
-		    mediaPlayer.setAutoPlay(true);
-		    mediaPlayer.play();
-		    
-			try {
-				Thread.sleep((song.getSongLength() + 2) *1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		    
-			songQueue.remove(0);
+		try {
+			while(!songQueue.isEmpty()) {
+				isPlaying = true;
+				Song song = songQueue.get(0);
+				File file = new File(song.getSongFile());
+			    URI uri = file.toURI();
+			    
+			    Media media = new Media(uri.toString());
+			    MediaPlayer mediaPlayer = new MediaPlayer(media);
+			    mediaPlayer.setAutoPlay(true);
+			    mediaPlayer.play();
+			    
+				try {
+					Thread.sleep((song.getSongLength() + 2) *1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			    
+				songQueue.remove(0);
 
-			 Platform.runLater(new Runnable() {
-		            @Override public void run() {
-		            	Iteration1Controller.getListView().getItems().remove(0);
-		            	Iteration1Controller.getListView().refresh();
-		            }
-		        });
+				 Platform.runLater(new Runnable() {
+			            @Override public void run() {
+			            	Iteration1Controller.getListView().getItems().remove(0);
+			            	Iteration1Controller.getListView().refresh();
+			            }
+			        });
+			}
+			isPlaying = false;
+		} catch(NullPointerException e) {
+			
 		}
-		isPlaying = false;
+		
 	}
-	
+	//SET USER LIST 
 	public static void setUserList(ArrayList<Student> studentList) {
 		users.clear();
 		users = studentList;
+	}
+	
+	//SET SONG QUE
+	public static void setSongQueue(ArrayList<Song> queList) {
+		songQueue = queList;
 	}
 	
 	public static ArrayList<Student> getStudentList() {
