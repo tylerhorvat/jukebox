@@ -310,6 +310,10 @@ public class Iteration1Controller extends Application {
 			ArrayList<Song> songList = (ArrayList<Song>) songInFile.readObject();
 			JukeBox.setSongList(songList);
 			
+			for(int i = 0; i < songList.size(); i++) {
+				songList.get(i).resetTimesPlayed();
+			}
+			
 			listView.setItems(null); 
 			listView.layout(); 
 			ObservableList<Song> data = FXCollections.observableArrayList(songQueue);
@@ -343,6 +347,12 @@ public class Iteration1Controller extends Application {
 			ObjectOutputStream songOutFile = new ObjectOutputStream(songBytesToDisk);
 			
 			outFile.writeObject(JukeBox.getSongQueue());
+			
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			songOutFile.writeObject(jukeBox.getSongList());
 			
 			outFile.close();
