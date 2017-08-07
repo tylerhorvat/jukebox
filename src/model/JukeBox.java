@@ -1,7 +1,7 @@
 /*
  * Class: JukeBox.java
  * Project: JukeBox
- * CSC 335 July 30, 2017
+ * CSC 335 August 6, 2017
  * Authors: Hayden Monarch
  * 			Tyler Horvat
  * 
@@ -17,12 +17,11 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import controller_view.Iteration1Controller;
-import controller_view.SongTableView;
-import controller_view.UserView;
 import javafx.application.Platform;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
+@SuppressWarnings("serial")
 public class JukeBox extends Thread implements Serializable {
 
 	/********************************************************
@@ -32,7 +31,6 @@ public class JukeBox extends Thread implements Serializable {
 	static ArrayList<Song> songList; 
 	static ArrayList<Student> users;
 	static boolean isPlaying;
-	
 	private static JukeBox jukeBox = null;
 	
 	/********************************************************
@@ -46,13 +44,6 @@ public class JukeBox extends Thread implements Serializable {
 		addStudents();
 		addSongs();
 		isPlaying = false;
-	}
-	
-	public static JukeBox getJukeBox() {
-		if (jukeBox == null) {
-			jukeBox = new JukeBox();
-		}
-		return jukeBox;
 	}
 	
 	/********************************************************
@@ -69,7 +60,6 @@ public class JukeBox extends Thread implements Serializable {
 		}
 		return -1;
 	}
-	
 	
 	/********************************************************
 	 * boolean authenticateUser(String name, String password)
@@ -128,9 +118,51 @@ public class JukeBox extends Thread implements Serializable {
 	 * ArrayList<Student> getUsers()
 	 * returns the user list
 	 ********************************************************/
+	public static ArrayList<Student> getUsers() {
+		return users;
+	}
 	
+	/********************************************************
+	 * public static JukeBox getJukeBox();
+	 * returns jukeBox. sets jukeBox to new JukeBox() if
+	 * jukeBox is null
+	 ********************************************************/
+	public static JukeBox getJukeBox() {
+		if (jukeBox == null) {
+			jukeBox = new JukeBox();
+		}
+		return jukeBox;
+	}
 	
+	/********************************************************
+	 * public static void setUserList()
+	 * clears the user list and resets it
+	 ********************************************************/
+	public static void setUserList(ArrayList<Student> studentList) {
+		users.clear();
+		users = studentList;
+	}
+	
+	/********************************************************
+	 * public static void setSongQueue()
+	 * sets the songQueue
+	 ********************************************************/
+	public static void setSongQueue(ArrayList<Song> queList) {
+		songQueue = queList;
+	}
+	
+	/********************************************************
+	 * public static ArrayList<Student> getStudentList()
+	 * returns the student list
+	 ********************************************************/
+	public static ArrayList<Student> getStudentList() {
+		return users;
+	}
 
+	/********************************************************
+	 * public static void setSongList()
+	 * sets the songlist
+	 ********************************************************/
 	public static void setSongList(ArrayList<Song> songList) {
 		JukeBox.songList = songList;
 	}
@@ -145,10 +177,6 @@ public class JukeBox extends Thread implements Serializable {
 		users.add(river);
 		users.add(ryan);
 		users.add(alex);
-	}
-	
-	public static ArrayList<Student> getUsers() {
-		return users;
 	}
 
 	/********************************************************
@@ -211,31 +239,16 @@ public class JukeBox extends Thread implements Serializable {
 			    
 				songQueue.remove(0);
 
-				 Platform.runLater(new Runnable() {
-			            @Override public void run() {
-			            	Iteration1Controller.getListView().getItems().remove(0);
-			            	Iteration1Controller.getListView().refresh();
-			            }
-			        });
+				Platform.runLater(new Runnable() {
+			        @Override public void run() {
+			            Iteration1Controller.getListView().getItems().remove(0);
+			            Iteration1Controller.getListView().refresh();
+			        }
+			    });
 			}
 			isPlaying = false;
 		} catch(NullPointerException e) {
 			
 		}
-		
-	}
-	//SET USER LIST 
-	public static void setUserList(ArrayList<Student> studentList) {
-		users.clear();
-		users = studentList;
-	}
-	
-	//SET SONG QUE
-	public static void setSongQueue(ArrayList<Song> queList) {
-		songQueue = queList;
-	}
-	
-	public static ArrayList<Student> getStudentList() {
-		return users;
 	}
 }

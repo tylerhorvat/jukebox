@@ -1,7 +1,7 @@
 /*
- * Class: Song.java
+ * Class: SongTableView.java
  * Project: JukeBox
- * CSC 335 July 30, 2017
+ * CSC 335 August 6, 2017
  * Authors: Hayden Monarch
  * 			Tyler Horvat
  * 

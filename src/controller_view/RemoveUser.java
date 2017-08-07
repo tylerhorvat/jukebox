@@ -1,3 +1,14 @@
+/*
+ * Class: RemoveUser.java
+ * Project: JukeBox
+ * CSC 335 August 6, 2017
+ * Authors: Hayden Monarch
+ * 			Tyler Horvat
+ * 
+ * This class opens a new user where an administrator can view a current list of users
+ * to select from and delete. 
+ */
+
 package controller_view;
 
 import javafx.collections.FXCollections;
@@ -13,9 +24,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.JukeBox;
 import model.Student;
-
 import java.util.ArrayList;
-
 import controller_view.AlertMe;
 
 public class RemoveUser {
@@ -33,8 +42,6 @@ public class RemoveUser {
 		Label instruction = new Label("Select user you wish to delete, then click delete button");
 		instruction.setTextFill(Color.DARKSLATEBLUE);
 		users = new UserView();
-		
-		
 		
 		Button cancel = new Button("Close");
 		Button deleteUser = new Button("Delete");
@@ -67,6 +74,11 @@ public class RemoveUser {
 		window.showAndWait();
 	}
 
+	/********************************************************
+	 * private void deleteUser()
+	 * handler to delete user when delete button is
+	 * clicked
+	 ********************************************************/
 	@SuppressWarnings({ "unchecked", "unused" })
 	private void deleteUser() {
 		
@@ -120,8 +132,6 @@ public class RemoveUser {
 			Scene scene = new Scene(pane);
 			window.setScene(scene);
 			window.showAndWait();
-			
-			
 			
 		}
 	}

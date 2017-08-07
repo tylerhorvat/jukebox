@@ -1,7 +1,7 @@
 /*
  * Class: Iteration1Controller.java
- * Project: JukeBox - Iteration 1
- * CSC 335 July 30, 2017
+ * Project: JukeBox - Iteration 3
+ * CSC 335 August 6, 2017
  * Authors: Hayden Monarch
  * 			Tyler Horvat
  * 
@@ -19,7 +19,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Optional;
-
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -97,7 +96,6 @@ public class Iteration1Controller extends Application {
 		
 		BorderPane all = new BorderPane();
 		
-
 		/********************************************************
 		 * LOGIN AREA
 		 ********************************************************/
@@ -130,7 +128,6 @@ public class Iteration1Controller extends Application {
 		userInput.add(new Label(""), 0, 6);
 		userInput.setHgap(10);
 		userInput.setVgap(10);
-		
 		
 		BorderPane adminButtons = new BorderPane();
 		adminButtons.setTop(null);
@@ -219,8 +216,7 @@ public class Iteration1Controller extends Application {
 		 ********************************************************/
 		all.setTop(userInput);
 		all.setCenter(views);
-		//all.setCenter(songTableView);
-		//all.setBottom(listView);
+		
 		Scene scene = new Scene(all, 500, 800);
 		primaryStage.setScene(scene);
 		
@@ -232,10 +228,9 @@ public class Iteration1Controller extends Application {
 		
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 		      public void handle(WindowEvent we) {
-		        // Write the student collection to a file
-		        System.out.println("App closing");
-		        writeJukeBoxSongs();
-		        writeJukeBoxUsers();
+		          // Write the student collection to a file
+		          writeJukeBoxSongs();
+		          writeJukeBoxUsers();
 		      }
 		});
 
@@ -246,6 +241,12 @@ public class Iteration1Controller extends Application {
 		handlePersistence();
 	}
 
+	/********************************************************
+	 * private static void handlePersistence()
+	 * Determines if the user would like to continue from
+	 * previously saved session or start fresh. 
+	 * calls appropriate methods accordingly
+	 ********************************************************/
 	private static void handlePersistence() throws ClassNotFoundException {
 	    Alert alert = new Alert(AlertType.CONFIRMATION);
 	    alert.setTitle("Start Up Option");
@@ -256,18 +257,22 @@ public class Iteration1Controller extends Application {
 	    // TODO: Either read the saved student collection or start with default
 	    if (result.get() == ButtonType.OK) {
 	    	
-	    } else {   
-	    	readJukeBoxUsers();
+	    } 
+	    else {   
+	        readJukeBoxUsers();
 	    	readJukeBoxSongs();	    	
 	    	
-	    		if(!jukeBox.isPlaying()) {
-					Thread thread = new Thread(jukeBox);
-					thread.start();
-				}	    	
-
+	    	if(!jukeBox.isPlaying()) {
+				Thread thread = new Thread(jukeBox);
+				thread.start();
+			}	    	
 	    }
-	  }
+	}
 	
+	/********************************************************
+	 * private static void readJukeBoxUsers()
+	 * reads saved users from file: persistentUsers
+	 ********************************************************/
 	private static void readJukeBoxUsers() throws ClassNotFoundException {
 		try {
 			FileInputStream rawBytes = new FileInputStream("persistentUsers");
@@ -275,7 +280,6 @@ public class Iteration1Controller extends Application {
 			
 			@SuppressWarnings("unchecked")
 			ArrayList<Student> studentList = (ArrayList<Student>) inFile.readObject();
-			System.out.println(studentList);
 			JukeBox.setUserList(studentList);
 			songTableView.refresh();
 			listView.refresh();
@@ -286,6 +290,11 @@ public class Iteration1Controller extends Application {
 		}		
 	}
 	
+	/********************************************************
+	 * private static void readJukeBoxSongs()
+	 * reads saved song queue from file: persistentQueue
+	 * reads saved song list from file: persistentSongs
+	 ********************************************************/
 	@SuppressWarnings("unchecked")
 	private static void readJukeBoxSongs() throws ClassNotFoundException {
 		try {
@@ -296,11 +305,9 @@ public class Iteration1Controller extends Application {
 			ObjectInputStream songInFile = new ObjectInputStream(songRawBytes);
 			
 			ArrayList<Song> songQueue = (ArrayList<Song>) inFile.readObject();
-			System.out.println(songQueue);
 			JukeBox.setSongQueue(songQueue);
 			
 			ArrayList<Song> songList = (ArrayList<Song>) songInFile.readObject();
-			System.out.println(songList);
 			JukeBox.setSongList(songList);
 			
 			listView.setItems(null); 
@@ -321,6 +328,11 @@ public class Iteration1Controller extends Application {
 		}		
 	}
 	
+	/********************************************************
+	 * private void writeJukeBoxSongs()
+	 * writes song queue to file: persistentQueue
+	 * writes song list to file: persistenSongs
+	 ********************************************************/
 	private void writeJukeBoxSongs() {
 		try {
 
@@ -339,9 +351,12 @@ public class Iteration1Controller extends Application {
 		} catch (IOException ioe) {
 			System.out.println(ioe);
 		}
-		
 	}
 	
+	/********************************************************
+	 * private void writeJukeBoxUsers()
+	 * writes  users to file: persistentUsers
+	 ********************************************************/
 	private void writeJukeBoxUsers() {
 		try {
 			FileOutputStream bytesToDisk = new FileOutputStream("persistentUsers");
@@ -353,7 +368,6 @@ public class Iteration1Controller extends Application {
 		} catch (IOException ioe) {
 			System.out.println(ioe);
 		}
-		
 	}
 
 	/********************************************************
@@ -363,7 +377,6 @@ public class Iteration1Controller extends Application {
 	 *  User: River - Pass: 333
 	 *  User: Ryan - Pass: 4444
 	 ********************************************************/
-
 
 	/********************************************************
 	 *                   public void logIn()
@@ -413,7 +426,6 @@ public class Iteration1Controller extends Application {
 		status.setTextFill(Color.BLACK);
 		currentUser = null;		
 		adminButtons.setTop(null);
-		
 	}
 	
 	/********************************************************
@@ -503,7 +515,5 @@ public class Iteration1Controller extends Application {
 	 ********************************************************/
 	public static ListView<Song> getListView() {
 		return listView;
-		
 	}
-	
 }

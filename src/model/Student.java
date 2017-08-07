@@ -1,7 +1,7 @@
 /*
  * Class: Student.java
  * Project: JukeBox
- * CSC 335 July 30, 2017
+ * CSC 335 August 6, 2017
  * Authors: Hayden Monarch
  * 			Tyler Horvat
  * 
@@ -15,6 +15,7 @@ package model;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+@SuppressWarnings("serial")
 public class Student implements Serializable {
 
 	/********************************************************
@@ -27,10 +28,6 @@ public class Student implements Serializable {
 	private LocalDate date;
 	private boolean admin;
 	private String administrator = "No";
-
-	public String getAdministrator() {
-		return administrator;
-	}
 
 	/********************************************************
 	 * public boolean Student(String name, String password)
@@ -115,25 +112,45 @@ public class Student implements Serializable {
 	}
 
 	/********************************************************
-	 * public boolean getSecondsRemaining()
+	 * public int getSecondsRemaining()
 	 * get seconds remaining on student account
 	 ********************************************************/
 	public int getSecondsRemaining() {
 		return secondsRemaining;
 	}
 	
+	/********************************************************
+	 * public boolean isAdmin()
+	 * return true for admin account, false otherwise
+	 ********************************************************/
 	public boolean isAdmin() {
 		return admin;
 	}
 
+	/********************************************************
+	 * public void setAdmin()
+	 * sets the admin variable. also sets administrator
+	 * variable to yes, if admin == true
+	 ********************************************************/
 	private void setAdmin(boolean admin) {
 		this.admin = admin;
 		if(admin) {
 			this.administrator = "Yes";
 		}
-		
 	}
 	
+	/********************************************************
+	 * public String getAdministrator()
+	 * get administrator variable for use with UserView.java
+	 ********************************************************/
+	public String getAdministrator() {
+		return administrator;
+	}
+	
+	/********************************************************
+	 * public String toString()
+	 * toString method used for debugging
+	 ********************************************************/
 	public String toString() {
 		return studentName + ", " + studentPassword;
 	}

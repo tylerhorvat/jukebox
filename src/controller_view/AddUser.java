@@ -1,7 +1,18 @@
+/*
+ * Class: UserView.java
+ * Project: JukeBox
+ * CSC 335 August 6, 2017
+ * Authors: Hayden Monarch
+ * 			Tyler Horvat
+ * 
+ * This class opens a new window where an administrator can add either a regular account
+ * or an administrator account. The administrator can also view a current list of users
+ * while making such changes.
+ */
+
 package controller_view;
 
 import java.util.ArrayList;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,7 +30,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.JukeBox;
 import model.Student;
-
 import controller_view.AlertMe;
 
 public class AddUser {
@@ -43,7 +53,6 @@ public class AddUser {
 		Button close = new Button("Close");
 		Button addUser = new Button("Add");
 		close.setOnAction(e -> window.close());
-		
 		
 		layout.add(new Label("    "), 0, 0);
 		layout.add(new Label(" "), 3, 0);
@@ -71,8 +80,7 @@ public class AddUser {
 		
 		fields.setHgap(10);
 		fields.setVgap(10);
-		
-		
+				
 		GridPane radioButtons = new GridPane();
 	    
 		Label accountType = new Label("Account type:\n");
@@ -107,13 +115,19 @@ public class AddUser {
 		BorderPane pane = new BorderPane();
 		pane.setTop(layout);
 		pane.setCenter(addPanel);
-
-		
+	
 		Scene scene = new Scene(pane);
 		window.setScene(scene);
 		window.showAndWait();
 	}
 
+	/********************************************************
+	 * private void addUser(TextField nameField, TextField passwordField)
+	 * handler to add a user when add button is clicked.
+	 * alerts user if any field is empty or an account type
+	 * is not selected.
+	 ********************************************************/
+	@SuppressWarnings({ "unchecked", "unused" })
 	private void addUser(TextField nameField, TextField passwordField) {
 		
 		String name = nameField.getText();
@@ -146,21 +160,22 @@ public class AddUser {
 				}
 				students.add(newStudent);
 				
-				
 				nameField.setText("");
 				passwordField.setText("");
 				
-				//users.refresh();
 				users.setItems(null); 
 				users.layout(); 
 
 				ObservableList<Student> data = FXCollections.observableArrayList(JukeBox.getUsers());
 				users.setItems(data);
 			}
-			
 		}
 	}
 	
+	/********************************************************
+	 * class ButtonHandler implements EventHandler<ActionEvent>
+	 * implements a handler for radio button clicks
+	 ********************************************************/
 	class ButtonHandler implements EventHandler<ActionEvent> {
 
 		@Override
@@ -172,9 +187,7 @@ public class AddUser {
 				admin = false;
 			else {
 				admin = true;
-			}
-			
+			}	
 		}
-		
 	}
 }

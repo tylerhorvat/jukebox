@@ -1,3 +1,15 @@
+/*
+ * Class: UserView.java
+ * Project: JukeBox
+ * CSC 335 August 6, 2017
+ * Authors: Hayden Monarch
+ * 			Tyler Horvat
+ * 
+ * This class implements a table view used with AddUser.java and RemoveUser.java.
+ * It allows an administrator to see a current list of users while adding and
+ * removing user accounts.
+ */
+
 package controller_view;
 
 import java.util.ArrayList;
@@ -13,7 +25,7 @@ import model.Student;
 public class UserView extends TableView {
 
 	/********************************************************
-	 * SongViewTable GLOBALS
+	 * UserView GLOBALS
 	 ********************************************************/
 	private ObservableList<Student> student;
 	ArrayList<Student> studentList;
@@ -28,19 +40,15 @@ public class UserView extends TableView {
 		TableColumn<Student, String> studentPassword = new TableColumn<Student, String>("Password");
 		TableColumn<Student, String> admin = new TableColumn<Student, String>("Admin");
 		
-		
 		this.getColumns().addAll(studentName, studentPassword, admin);
 		
 		studentName.setCellValueFactory(new PropertyValueFactory<Student, String>("studentName"));
 		studentPassword.setCellValueFactory(new PropertyValueFactory<Student, String>("studentPassword"));
 		admin.setCellValueFactory(new PropertyValueFactory<Student, String>("administrator"));
 		
-		
 		/********************************************************
 		 * Initializing
-		 ********************************************************/
-	
-		//JukeBox jukeBox = new JukeBox();		
+		 ********************************************************/		
 		studentList = JukeBox.getUsers();
 		student = FXCollections.observableArrayList(studentList);
 
@@ -50,6 +58,4 @@ public class UserView extends TableView {
 	public ArrayList<Student> getStudentList() {
 		return studentList;
 	}
-
-
 }
